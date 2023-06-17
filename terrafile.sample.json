@@ -1,0 +1,35 @@
+{
+  "test-module": {
+    "comment": "Local directory module; source begins with absolute or relative paths ('/' or './' or '../').",
+    "source": "./__tests__/modules/test-module"
+  },
+  "terraform-aws-vpc": {
+    "comment": "Terraform Registry Module; if version is not specified, fetches the latest version.",
+    "source": "terraform-aws-modules/vpc/aws",
+    "version": "2.78.0"
+  },
+  "terraform-aws-vpc2": {
+    "comment": "Git module over HTTPS; if version is not specified, fecthes the default branch. Version can also be a tag or commit SHA.",
+    "source": "https://github.com/terraform-aws-modules/terraform-aws-vpc.git",
+    "version": "master"
+  },
+  "terraform-aws-vpc3": {
+    "comment": "Git module over HTTPS using alternative '?ref=' syntax to specify version.",
+    "source": "git@github.com:terraform-aws-modules/terraform-aws-vpc.git?ref=43edd4400e5e596515f8d787603c37e08b99abd5"
+  },
+  "terraform-aws-vpc4": {
+    "comment": "Git module over SSH; note ssh-agent needed with appropriate key.",
+    "source": "https://github.com/terraform-aws-modules/terraform-aws-vpc.git",
+    "version": "v2.78.0"
+  },
+  "terraform-aws-vpc5": {
+    "comment": "Specify path to module, e.g. within a Git repo/monorepo containing multiple modules.",
+    "source": "git@github.com:terraform-aws-modules/terraform-aws-vpc.git",
+    "path": "/examples/simple-vpc",
+    "version": "v2.78.0"
+  },
+  "terraform-aws-vpc6": {
+    "comment": "Specify path to module using alternate path syntax.",
+    "source": "git@github.com:terraform-aws-modules/terraform-aws-vpc.git//examples/simple-vpc?ref=v2.78.0"
+  }
+}

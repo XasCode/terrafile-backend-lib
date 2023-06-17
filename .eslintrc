@@ -1,0 +1,70 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "project": "./tsconfig.eslint.json"
+  },
+  "env": {
+    "jest": true
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:json/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/max-len": "off",
+    "max-len": ["error", { "code": 120 }],
+    "@typescript-eslint/quotes": "off",
+    "quotes": ["error", "backtick"],
+    "@typescript-eslint/no-multi-spaces": "off",
+    "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
+    "@typescript-eslint/comma-dangle": "off",
+    "comma-dangle": ["error", "always-multiline"],
+    "@typescript-eslint/function-paren-newline": "off",
+    "function-paren-newline": ["error", "multiline-arguments"],
+    "@typescript-eslint/object-curly-newline": "off",
+    "object-curly-newline": ["error", { "consistent": true }],
+    "@typescript-eslint/operator-linebreak": "off",
+    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
+    "@typescript-eslint/indent": "off",
+    "indent": ["error", 2, { "offsetTernaryExpressions": true, "SwitchCase": 1}],
+    "@typescript-eslint/implicit-arrow-linebreak": "off",
+    "implicit-arrow-linebreak": ["error", "below"],
+    "@typescript-eslint/arrow-body-style": "off",
+    "arrow-body-style": ["error", "always"],
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-console": "off",
+    "no-console": "off",
+    "@typescript-eslint/no-restricted-syntax": "off",
+    "no-restricted-syntax": "off",
+    "@typescript-eslint/newline-per-chained-call": "off",
+    "newline-per-chained-call": "off",
+    "import/prefer-default-export": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.mocked.spec.ts"],
+      "rules": {
+        "import/first": "off"
+      }
+    },
+    {
+      "files": ["__tests__/testUtils/mock.ts"],
+      "rules": {
+        "global-require": "off"
+      }
+    },
+    {
+      "files": ["**/mock.ts"],
+      "rules": {
+        "@typescript-eslint/global-require": "off",
+        "global-require": "off"
+      }
+    }
+  ]
+}

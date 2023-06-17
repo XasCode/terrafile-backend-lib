@@ -1,0 +1,7 @@
+{
+  "xascode-sample-invalid5": {
+    "comment": "Git module (SSH + commit)",
+    "source": "git@github.com:terraform-aws-modules/terraform-aws-vpc.git",
+    "badkey": "abcdefg"
+  }
+}
