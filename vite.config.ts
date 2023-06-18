@@ -19,10 +19,8 @@ export default defineConfig({
   build: {
     lib: {
       name: 'terrafile-backend-lib',
-      entry: {
-        'terrafile-backend-lib': resolve(__dirname, 'src/backend/index.ts'),
-        terrafile: resolve(__dirname, 'src/cli/terrafile.ts'),
-      },
+      fileName: 'terrafile-backend-lib',
+      entry: resolve(__dirname, 'src/backend/index.ts'),
     },
   },
   optimizeDeps: {

@@ -3,7 +3,7 @@ import { beforeAll, afterAll, afterEach, beforeEach, describe, it, expect, vi } 
 
 import { readFileContents } from '../src/backend/processFile';
 
-import { CliOptions, ExecResult } from '../src/shared/types';
+import { CliOptions, ExecResult } from '../src/backend';
 
 import fetcher from '@jestaubach/fetcher-axios';
 import cloner from '@jestaubach/cloner-git';

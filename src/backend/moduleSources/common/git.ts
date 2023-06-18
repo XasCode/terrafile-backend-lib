@@ -1,4 +1,4 @@
-import { Path, Status, FetchParams } from '../../../shared/types';
+import { Path, Status, FetchParams } from '../../types';
 import { cloneRepoToDest } from './cloneRepo';
 import type { ModulesKeyType } from '../../moduleSources';
 import { startsWith } from './startsWith';

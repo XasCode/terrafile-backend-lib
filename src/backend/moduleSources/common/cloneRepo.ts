@@ -2,7 +2,7 @@ import path from 'path';
 import chalk from 'chalk';
 
 import { ExecFileException } from 'child_process';
-import { ExecResult, Path, RepoLocation, SourceParts, Status, FsHelpers } from '../../../shared/types';
+import { ExecResult, Path, RepoLocation, SourceParts, Status, FsHelpers } from '../../types';
 import gitCloner from '@jestaubach/cloner-git';
 
 const defaultGitCloner = gitCloner.use(gitCloner.default);

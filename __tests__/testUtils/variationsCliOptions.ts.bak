@@ -8,7 +8,7 @@ const { getAbsolutePath } = useFsHelpers;
 
 import { cartesian } from './cartesian';
 
-import { CliArgs, CliOptions, ExecResult, TestDefinition } from '../../src/shared/types';
+import { CliArgs, CliOptions, ExecResult, TestDefinition } from '../../src/backend/types';
 
 import {
   helpContent,

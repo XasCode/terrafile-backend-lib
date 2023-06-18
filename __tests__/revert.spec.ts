@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs-extra';
 import { getPartsFromHttp } from '../src/backend/moduleSources/common/cloneRepo';
 import Git from '../src/backend/moduleSources/common/git';
-import { Path, ExecResult } from '../src/shared/types';
+import { Path, ExecResult } from '../src/backend';
 import { beforeAll, afterAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 
 import { install } from '../src/backend';

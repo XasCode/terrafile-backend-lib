@@ -1,5 +1,5 @@
 import { startsWith } from './common/startsWith';
-import { Path, Status, FetchParams } from '../../shared/types';
+import { Path, Status, FetchParams } from '../types';
 import type { ModulesKeyType } from './';
 import Validate from './common/validate';
 

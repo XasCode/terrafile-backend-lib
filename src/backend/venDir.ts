@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { validOptions } from '../backend/utils';
-import { CliOptions, Option, Path, Status } from '../shared/types';
+import { CliOptions, Option, Path, Status } from './types';
 
 function cleanUpOldSaveLocation(dir: Path, options: CliOptions): void {
   options.fsHelpers.rimrafDir(dir);

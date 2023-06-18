@@ -1,5 +1,5 @@
 import { startsWith } from './common/startsWith';
-import { Path, RetString, Status, Config, FetchParams } from '../../shared/types';
+import { Path, RetString, Status, Config, FetchParams } from '../types';
 import { cloneRepoToDest } from './common/cloneRepo';
 import type { ModulesKeyType } from './';
 import axiosFetcher from '@jestaubach/fetcher-axios';

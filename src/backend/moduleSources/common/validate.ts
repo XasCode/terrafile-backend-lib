@@ -1,4 +1,4 @@
-import { Entry } from '../../../shared/types';
+import { Entry } from '../../types';
 
 // Very simplistic validation of terrafile entries.
 // If a list of allowed params is provided, this returns a function that

@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-import { Entry, Path, Status, FetchParams } from '../../shared/types';
+import { Entry, Path, Status, FetchParams } from '../types';
 
 import local from './local';
 import gitHttps from './gitHttps';

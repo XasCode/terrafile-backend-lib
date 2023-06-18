@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/terrafile-backend-lib.umd.cjs",
   "module": "./dist/terrafile-backend-lib.js",
-  "types": "./dist/backend/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],

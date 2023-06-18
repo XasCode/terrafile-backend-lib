@@ -1,5 +1,5 @@
 import { getSaveLocation } from '../backend/venDir';
-import { Path, Status, CliOptions } from '../shared/types';
+import { Path, Status, CliOptions } from './types';
 
 function restoreExistingDir(installDir: Path, options: CliOptions): Path {
   let retVal = null;

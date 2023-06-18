@@ -1,4 +1,4 @@
-import { Backend } from '../../src/shared/types';
+import { Backend } from '../../src/backend/types';
 import { install as defaultInstall } from '../../src/backend';
 import { install as mockedInstall } from '../../__mocks__/backend.mock';
 

@@ -1,6 +1,27 @@
 import { readFileContents } from './processFile';
 import { restoreDirectory } from './restore';
-import { CliOptions } from '../shared/types';
+import {
+  Backend,
+  CliArgs,
+  CliOptions,
+  Config,
+  Entry,
+  ExecResult,
+  FetchParams,
+  FsHelpers,
+  Option,
+  Path,
+  RepoLocation,
+  Request,
+  Response,
+  RetBool,
+  RetString,
+  RetVal,
+  RetPath,
+  SourceParts,
+  Status,
+} from './types';
+
 import { createTargetDirectory } from './venDir';
 import chalk from 'chalk';
 
@@ -29,3 +50,24 @@ async function install(options: CliOptions): Promise<void> {
 }
 
 export { install };
+export type {
+  Backend,
+  CliArgs,
+  CliOptions,
+  Config,
+  Entry,
+  ExecResult,
+  FetchParams,
+  FsHelpers,
+  Option,
+  Path,
+  RepoLocation,
+  Request,
+  Response,
+  RetBool,
+  RetString,
+  RetVal,
+  RetPath,
+  SourceParts,
+  Status,
+};

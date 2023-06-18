@@ -7,7 +7,7 @@ import fsHelpers from '@jestaubach/fs-helpers';
 const useFsHelpers = fsHelpers.use(fsHelpers.default);
 const { getAbsolutePath, createDir, touchFile, rimrafDirs, checkIfDirExists } = useFsHelpers;
 
-import { CliOptions } from '../src/shared/types';
+import { CliOptions } from '../src/backend';
 
 const testDirs = [`ok_vendor_a`, `ok_vendor_b`, `ok_vendor_c`, `err_vendor`];
 

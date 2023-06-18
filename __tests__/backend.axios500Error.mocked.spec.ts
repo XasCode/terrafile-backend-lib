@@ -7,7 +7,7 @@ const fsHelpers = fsh.use(fsh.default);
 const { rimrafDir, getAbsolutePath } = fsHelpers;
 const mockedFsHelpers = fsh.use(fsh.mock);
 
-import { CliOptions, ExecResult } from '../src/shared/types';
+import { CliOptions, ExecResult } from '../src/backend';
 
 import fetcher from '@jestaubach/fetcher-axios';
 import cloner from '@jestaubach/cloner-git';

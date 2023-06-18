@@ -1,4 +1,4 @@
-import { Entry } from '../../src/shared/types';
+import { Entry } from '../../src/backend';
 import Git from '../../src/backend/moduleSources/common/git';
 import { beforeAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 

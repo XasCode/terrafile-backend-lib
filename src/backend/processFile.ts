@@ -2,7 +2,7 @@ import path from 'path';
 import chalk from 'chalk';
 
 import { validOptions } from '../backend/utils';
-import { CliOptions, Option, Path, Status, Config, ExecResult, RetString, FsHelpers } from '../shared/types';
+import { CliOptions, Option, Path, Status, Config, ExecResult, RetString, FsHelpers } from './types';
 import { validate, fetch } from '../backend/moduleSources';
 
 function Terrafile(options: CliOptions): Status {

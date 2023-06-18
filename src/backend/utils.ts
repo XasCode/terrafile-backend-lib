@@ -1,4 +1,4 @@
-import { CliOptions, Option } from '../shared/types';
+import { CliOptions, Option } from './types';
 
 function validOptions(options: CliOptions, fileOrFolder: Option): boolean {
   return (

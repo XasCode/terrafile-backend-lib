@@ -22,15 +22,6 @@ type CliArgs = {
   file?: Path;
 };
 
-type TestDefinition = {
-  args: string;
-  command: string;
-  options: CliOptions;
-  error: ExecFileException;
-  stdOut: string;
-  stdErr: string;
-};
-
 type FsHelpers = {
   getAbsolutePath: (_: string) => RetPath;
   checkIfFileExists: (_: string) => RetBool;
@@ -140,5 +131,4 @@ export type {
   RetPath,
   SourceParts,
   Status,
-  TestDefinition,
 };
