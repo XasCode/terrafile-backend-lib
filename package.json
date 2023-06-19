@@ -1,6 +1,6 @@
 {
   "name": "@jestaubach/terrafile-backend-lib",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "",
   "type": "module",
   "main": "./dist/terrafile-backend-lib.umd.cjs",
