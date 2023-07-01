@@ -13,7 +13,7 @@ const { escapeRegExp } = lodash;
 const externals = [
   ...builtinModules,
   ...Object.keys(pkg.dependencies).map((name) => new RegExp('^' + escapeRegExp(name) + '(\\/.+)?$')),
-];
+  ];
 
 export default defineConfig({
   build: {
