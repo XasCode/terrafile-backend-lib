@@ -21,6 +21,9 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: list files
+        run: ls -la
+
       - name: Run tests and generate coverage report
         run: npm test
 
