@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "tsc && vite build",
-    "test": "vitest run --coverage --reporter dot",
+    "test": "vitest run --threads=false --coverage --reporter dot",
     "test-all": "vitest run --coverage --reporter dot --config vite-base.config.js",
     "lint": "eslint src",
     "bump": "npm version patch",
