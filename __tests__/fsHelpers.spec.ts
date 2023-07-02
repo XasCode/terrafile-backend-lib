@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import { beforeAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
+import * as spy from '../src/spy';
 
 import fsh from '@jestaubach/fs-helpers';
 const fsHelpers = fsh.use(fsh.default);
@@ -30,7 +31,7 @@ describe(`getAbsolutePath returns an absolute path from relative or abs path`, (
 describe(`createDir should create a directory at the provided location`, () => {
   beforeEach(() => {
     fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`bar`).value);
-    vi.resetAllMocks();
+    spy.clear();
   });
 
   afterEach(() => {
@@ -46,15 +47,15 @@ describe(`createDir should create a directory at the provided location`, () => {
   it(`should raise error if provided a path to a file`, () => {
     const createdDirsStartingLocation = fsHelpers.createDir(fsHelpers.getAbsolutePath(`LICENSE`).value).value;
     expect(createdDirsStartingLocation).toBe(undefined);
-    expect(global.spyErr).toHaveBeenLastCalledWith(`Error creating dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
-    expect(global.spyLog).not.toHaveBeenCalled();
+    expect(console.error).toHaveBeenLastCalledWith(`Error creating dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
+    expect(console.log).not.toHaveBeenCalled();
   });
 });
 
 describe(`rimrafDir should delete a dir and its contents`, () => {
   beforeEach(async () => {
     await fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`vendor`).value);
-    vi.resetAllMocks();
+    spy.clear();
   });
 
   afterEach(() => {
@@ -65,21 +66,21 @@ describe(`rimrafDir should delete a dir and its contents`, () => {
     fsHelpers.createDir(fsHelpers.getAbsolutePath(`vendor/modules`).value);
     const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`vendor`).value).value;
     expect(deletedDir).toBe(fsHelpers.getAbsolutePath(`vendor`).value);
-    expect(global.spyErr).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
     expect(fsHelpers.checkIfDirExists(`vendor`).value).toBe(false);
   });
 
   it(`should error when attempting to delete a directory that doesn't exist`, () => {
     const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`sOmEtHiNg`).value).value;
     expect(deletedDir).toBe(undefined);
-    expect(global.spyErr).not.toHaveBeenLastCalledWith(`Error deleting dir: ${`sOmEtHiNg`}`);
+    expect(console.error).not.toHaveBeenLastCalledWith(`Error deleting dir: ${`sOmEtHiNg`}`);
     expect(fsHelpers.checkIfDirExists(`sOmEtHiNg`).value).toBe(false);
   });
 
   it(`should error when attempting to delete a directory that is not a dir`, () => {
     const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`LICENSE`).value).value;
     expect(deletedDir).toBe(undefined);
-    expect(global.spyErr).toHaveBeenLastCalledWith(`Error deleting dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
+    expect(console.error).toHaveBeenLastCalledWith(`Error deleting dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
     expect(
       fs.existsSync(fsHelpers.getAbsolutePath(`LICENSE`).value) &&
         !fs.lstatSync(fsHelpers.getAbsolutePath(`LICENSE`).value).isDirectory(),
@@ -90,7 +91,7 @@ describe(`rimrafDir should delete a dir and its contents`, () => {
 describe(`abortDirCreation should delete dirs that were created`, () => {
   beforeEach(() => {
     fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`bar`).value);
-    vi.resetAllMocks();
+    spy.clear();
   });
 
   afterEach(() => {
@@ -100,7 +101,7 @@ describe(`abortDirCreation should delete dirs that were created`, () => {
   it(`should clean up any dirs created`, () => {
     const dirToDelete = fsHelpers.createDir(fsHelpers.getAbsolutePath(`bar`).value).value;
     fsHelpers.abortDirCreation(dirToDelete);
-    expect(global.spyErr).toHaveBeenLastCalledWith(
+    expect(console.error).toHaveBeenLastCalledWith(
       `Cleaning up due to abort, directories created starting at: ${JSON.stringify(
         fsHelpers.getAbsolutePath(`bar`).value,
       )}`,
@@ -109,13 +110,13 @@ describe(`abortDirCreation should delete dirs that were created`, () => {
 
   it(`should do nothing if no dirs to cleanup`, () => {
     fsHelpers.abortDirCreation(null);
-    expect(global.spyErr).toHaveBeenLastCalledWith(`Cleaning up due to abort, no directory to clean up.`);
+    expect(console.error).toHaveBeenLastCalledWith(`Cleaning up due to abort, no directory to clean up.`);
   });
 });
 
 describe(`rename`, () => {
   it(`should err on invalid dirs`, () => {
     fsHelpers.renameDir(`./doesNotExist`, `./doesNotExistEither`);
-    expect(global.spyErr).toHaveBeenLastCalledWith(`ENOENT`);
+    expect(console.error).toHaveBeenLastCalledWith(`ENOENT`);
   });
 });
