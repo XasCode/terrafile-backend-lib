@@ -33,7 +33,7 @@ describe(`test backend's ability to revert on error`, () => {
       file: configFile,
       directory: destination,
       fetcher: fetcher.use(fetcher.mock),
-      cloner: cloner.use(cloner.mock(mockedFsHelpers) as (_: string[], __: string) => Promise<ExecResult>),
+      cloner: cloner.use(cloner.mock(mockedFsHelpers) as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
     });
 
@@ -41,8 +41,7 @@ describe(`test backend's ability to revert on error`, () => {
     const testJson = JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
-      console.log(`modName: ${modName} - ${getAbsolutePath(`${destination}/${modName}/main.tf`).value} - ${checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value}`);
-      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
 
     // 2nd install, w/ error
@@ -50,7 +49,7 @@ describe(`test backend's ability to revert on error`, () => {
       file: configFile,
       directory: destination,
       fetcher: fetcher.use(fetcher.mock),
-      cloner: cloner.use(cloner.mockError() as (_: string[], __: string) => Promise<ExecResult>),
+      cloner: cloner.use(cloner.mockError() as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
     });
 
@@ -70,7 +69,7 @@ describe(`test backend's ability to revert on error`, () => {
       file: configFile,
       directory: destination,
       fetcher: fetcher.use(fetcher.mock),
-      cloner: cloner.use(cloner.mockError() as (_: string[], __: string) => Promise<ExecResult>),
+      cloner: cloner.use(cloner.mockError() as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
       createDir: (_: Path) => {
         return null;
