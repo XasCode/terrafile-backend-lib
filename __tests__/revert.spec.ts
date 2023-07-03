@@ -41,6 +41,7 @@ describe(`test backend's ability to revert on error`, () => {
     const testJson = JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
+      console.log(`modName: ${modName} - ${getAbsolutePath(`${destination}/${modName}/main.tf`).value} - ${checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value}`);
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toBe(true);
     }
 
