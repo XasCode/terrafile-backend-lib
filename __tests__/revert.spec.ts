@@ -1,3 +1,4 @@
+import { mergeConfig } from 'vitest/config';
 import { readFileSync } from 'fs-extra';
 import { getPartsFromHttp } from '../src/backend/moduleSources/common/cloneRepo';
 import Git from '../src/backend/moduleSources/common/git';
@@ -10,18 +11,19 @@ import fetcher from '@jestaubach/fetcher-axios';
 import cloner from '@jestaubach/cloner-git';
 
 import fsh from '@jestaubach/fs-helpers';
-const mockedFsHelpers = fsh.use(fsh.mock, [`terrafile.sample.json`, `./__tests__/modules/test-module/main.tf`]);
+//const mockedFsHelpers = fsh.use(fsh.mock, [`terrafile.sample.json`, `./__tests__/modules/test-module/main.tf`]);
+const mockedFsHelpers = fsh.use(fsh.default);
 const { getAbsolutePath, rimrafDir, checkIfFileExists } = mockedFsHelpers;
 
 const { replacePathIfPathParam, replaceUrlVersionIfVersionParam } = Git();
 
-describe(`test backend's ability to revert on error`, () => {
-  beforeAll(() => {
-    rimrafDir(`revert`);
+describe(`test backend's ability to revert on error`, async () => {
+  beforeAll(async () => {
+    await rimrafDir(`revert`);
   });
 
-  afterAll(() => {
-    rimrafDir(`revert`);
+  afterAll(async () => {
+    await rimrafDir(`revert`);
   });
 
   it(`1st install successfull, then 2nd install to same loc should fail processing file and revert dir`, async () => {
@@ -98,7 +100,7 @@ describe(`test backend's ability to revert on error`, () => {
       file: configFile,
       directory: destination,
       fetcher: fetcher.use(fetcher.mock),
-      cloner: cloner.use(cloner.mock(mockedFsHelpers) as (_: string[], __: string) => Promise<ExecResult>),
+      cloner: cloner.use(cloner.mock(mockedFsHelpers) as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
     });
 
@@ -114,7 +116,7 @@ describe(`test backend's ability to revert on error`, () => {
       file: configFile,
       directory: destination,
       fetcher: fetcher.use(fetcher.mock),
-      cloner: cloner.use(cloner.mockError() as (_: string[], __: string) => Promise<ExecResult>),
+      cloner: cloner.use(cloner.mockError() as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
       createDir: (_: Path) => {
         return null;
