@@ -56,7 +56,7 @@ describe(`test backend's ability to revert on error`, () => {
     // verify expected directories exist; re-use testJson
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
-      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
   });
 
@@ -85,7 +85,7 @@ describe(`test backend's ability to revert on error`, () => {
       const regRepoUrl = replacePathIfPathParam(newUrl, params.path);
       const [, repoDir] = getPartsFromHttp(regRepoUrl);
       const usePath = repoDir ? repoDir.slice(1) : ``;
-      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}${usePath}/main.tf`).value).value).toBe(false);
+      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}${usePath}/main.tf`).value).value).toEqual(false);
     }
   });
 
@@ -106,7 +106,7 @@ describe(`test backend's ability to revert on error`, () => {
     const testJson = JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
-      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
 
     // 2nd install, w/ error
@@ -124,7 +124,7 @@ describe(`test backend's ability to revert on error`, () => {
     // verify expected directories exist; re-use testJson
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
-      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
   });
 });

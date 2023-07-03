@@ -54,7 +54,7 @@ describe(`read file contents should read specified json file and validate its co
     const testJson = await JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
     expect(Object.keys(testJson).length).toBe(31);
     for (const modName of Object.keys(testJson)) {
-      expect(checkIfFileExists(getAbsolutePath(`err_vendor1/modules/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`err_vendor1/modules/${modName}/main.tf`).value).value).toEqual(true);
     }
   });
 
@@ -72,7 +72,7 @@ describe(`read file contents should read specified json file and validate its co
     const testJson = await JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
     expect(Object.keys(testJson).length).toBe(31);
     for (const modName of Object.keys(testJson)) {
-      expect(checkIfFileExists(getAbsolutePath(`err_vendor2/modules/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`err_vendor2/modules/${modName}/main.tf`).value).value).toEqual(true);
     }
   });
 
@@ -92,7 +92,7 @@ describe(`read file contents should read specified json file and validate its co
     const testJson = await JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
-      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toBe(true);
+      expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
   });
 
