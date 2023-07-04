@@ -1,10 +1,9 @@
 import path from 'path';
-import fs from 'fs-extra';
 import { beforeAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import * as spy from '../src/spy';
 
 import fsh from '@jestaubach/fs-helpers';
-const fsHelpers = fsh.use(fsh.default);
+const fsHelpers = fsh.use(fsh.mock, [`LICENSE`]);
 
 describe(`checkIfDirExists checks for the existence of a directory`, () => {
   it(`should return true if directory exists`, () => {
@@ -71,19 +70,23 @@ describe(`rimrafDir should delete a dir and its contents`, () => {
   });
 
   it(`should error when attempting to delete a directory that doesn't exist`, () => {
-    const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`sOmEtHiNg`).value).value;
-    expect(deletedDir).toBe(undefined);
+    const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`sOmEtHiNg`).value);
+    expect(deletedDir.success).toEqual(false);
+    expect(deletedDir.value).toEqual(undefined);
+    expect(deletedDir.error).toContain(`Error deleting dir:`);
     expect(console.error).not.toHaveBeenLastCalledWith(`Error deleting dir: ${`sOmEtHiNg`}`);
     expect(fsHelpers.checkIfDirExists(`sOmEtHiNg`).value).toBe(false);
   });
 
   it(`should error when attempting to delete a directory that is not a dir`, () => {
-    const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`LICENSE`).value).value;
-    expect(deletedDir).toBe(undefined);
+    const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`LICENSE`).value);
+    expect(deletedDir.success).toEqual(false);
+    expect(deletedDir.value).toEqual(undefined);
+    expect(deletedDir.error).toContain(`Error deleting dir:`);
     expect(console.error).toHaveBeenLastCalledWith(`Error deleting dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
     expect(
-      fs.existsSync(fsHelpers.getAbsolutePath(`LICENSE`).value) &&
-        !fs.lstatSync(fsHelpers.getAbsolutePath(`LICENSE`).value).isDirectory(),
+      fsHelpers.checkIfFileExists(fsHelpers.getAbsolutePath(`LICENSE`).value).value &&
+        !fsHelpers.checkIfDirExists(fsHelpers.getAbsolutePath(`LICENSE`).value).value,
     ).toBe(true);
   });
 });

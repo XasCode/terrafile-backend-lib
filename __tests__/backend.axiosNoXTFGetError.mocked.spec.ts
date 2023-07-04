@@ -3,8 +3,7 @@ import { beforeAll, afterEach, beforeEach, describe, it, expect, vi } from 'vite
 import { readFileContents } from '../src/backend/processFile';
 
 import fsh from '@jestaubach/fs-helpers';
-const fsHelpers = fsh.use(fsh.default);
-const { rimrafDir, getAbsolutePath } = fsHelpers;
+const { rimrafDir, getAbsolutePath } = fsh.use(fsh.default);
 const mockedFsHelpers = fsh.use(fsh.mock);
 
 import { CliOptions, ExecResult } from '../src/backend';

@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs-extra';
 import { beforeAll, afterAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 
 import { readFileContents } from '../src/backend/processFile';
@@ -14,9 +13,10 @@ const useFsHelpers = fsHelpers.use(fsHelpers.mock, [
   `./__tests__/modules/test-module/main.tf`,
   `terrafile.sample.json`,
 ]);
+const { getAbsolutePath, createDir, touchFile, rimrafDirs, checkIfFileExists } = useFsHelpers;
+const { readFile } = fsHelpers.use(fsHelpers.default);
 const useFetcher = fetcher.use(fetcher.mock);
 const useCloner = cloner.use(cloner.mock(useFsHelpers) as (_: string[], __?: string) => Promise<ExecResult>);
-const { getAbsolutePath, createDir, touchFile, rimrafDirs, checkIfFileExists } = useFsHelpers;
 
 const testDirs = [`err_vendor1`, `err_vendor2`, `err_vendor3`, `err_vendor4`, `err_vendor_lerror`, `err_vendor_2x`];
 
@@ -51,7 +51,7 @@ describe(`read file contents should read specified json file and validate its co
     expect(retVals.error).toBe(null);
     expect(retVals.success).toBe(true);
     expect(retVals.contents).not.toEqual(null);
-    const testJson = await JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
+    const testJson = await JSON.parse(readFile(getAbsolutePath(configFile).value).value);
     expect(Object.keys(testJson).length).toBe(31);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`err_vendor1/modules/${modName}/main.tf`).value).value).toEqual(true);
@@ -69,7 +69,7 @@ describe(`read file contents should read specified json file and validate its co
     });
     expect(retVals.success).toBe(true);
     expect(retVals.contents).not.toEqual(null);
-    const testJson = await JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
+    const testJson = await JSON.parse(readFile(getAbsolutePath(configFile).value).value);
     expect(Object.keys(testJson).length).toBe(31);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`err_vendor2/modules/${modName}/main.tf`).value).value).toEqual(true);
@@ -89,7 +89,7 @@ describe(`read file contents should read specified json file and validate its co
     expect(retVals.error).toBe(null);
     expect(retVals.success).toBe(true);
     expect(retVals.contents).not.toEqual(null);
-    const testJson = await JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
+    const testJson = await JSON.parse(readFile(getAbsolutePath(configFile).value).value);
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);

@@ -1,5 +1,5 @@
 import fsHelpers from '@jestaubach/fs-helpers';
-const useFsHelpers = fsHelpers.use(fsHelpers.default);
+const useFsHelpers = fsHelpers.use(fsHelpers.mock);
 const { getAbsolutePath, createDir, touchFile, rimrafDir, checkIfFileExists, checkIfDirExists } = useFsHelpers;
 import { beforeAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 

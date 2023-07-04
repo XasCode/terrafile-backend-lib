@@ -1,5 +1,3 @@
-import { mergeConfig } from 'vitest/config';
-import { readFileSync } from 'fs-extra';
 import { getPartsFromHttp } from '../src/backend/moduleSources/common/cloneRepo';
 import Git from '../src/backend/moduleSources/common/git';
 import { Path, ExecResult } from '../src/backend';
@@ -11,8 +9,8 @@ import fetcher from '@jestaubach/fetcher-axios';
 import cloner from '@jestaubach/cloner-git';
 
 import fsh from '@jestaubach/fs-helpers';
-//const mockedFsHelpers = fsh.use(fsh.mock, [`terrafile.sample.json`, `./__tests__/modules/test-module/main.tf`]);
-const mockedFsHelpers = fsh.use(fsh.default);
+const mockedFsHelpers = fsh.use(fsh.mock, [`terrafile.sample.json`, `./__tests__/modules/test-module/main.tf`]);
+const { readFile } = fsh.use(fsh.default);
 const { getAbsolutePath, rimrafDir, checkIfFileExists } = mockedFsHelpers;
 
 const { replacePathIfPathParam, replaceUrlVersionIfVersionParam } = Git();
@@ -40,7 +38,7 @@ describe(`test backend's ability to revert on error`, async () => {
     });
 
     // verify expected directories exist
-    const testJson = JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
+    const testJson = JSON.parse(readFile(getAbsolutePath(configFile).value).value);
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
@@ -79,7 +77,7 @@ describe(`test backend's ability to revert on error`, async () => {
     });
 
     // verify expected directories exist; re-use testJson
-    const testJson = JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
+    const testJson = JSON.parse(readFile(getAbsolutePath(configFile).value).value);
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
       const params = testJson[modName];
@@ -105,7 +103,7 @@ describe(`test backend's ability to revert on error`, async () => {
     });
 
     // verify expected directories exist
-    const testJson = JSON.parse(readFileSync(getAbsolutePath(configFile).value, `utf-8`));
+    const testJson = JSON.parse(readFile(getAbsolutePath(configFile).value).value);
     expect(Object.keys(testJson).length).toBe(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
