@@ -31,7 +31,7 @@
     "@jestaubach/cloner-git": "^0.1.13",
     "@jestaubach/fetcher-axios": "^0.1.7",
     "@jestaubach/fs-helpers": "^0.2.16",
-    "axios": "^0.27.2",
+    "axios": "^1.4.0",
     "builtin-modules": "^3.3.0",
     "chalk": "^4.1.2",
     "fs-extra": "^11.1.1",
