@@ -37,6 +37,7 @@ export default defineConfig({
     mockReset: true,
     coverage: {
       provider: 'istanbul',
+      reporter: [`text`, `json`, `html`, `lcov`],
     },
     environment: 'node',
     testTimeout: 20000,
