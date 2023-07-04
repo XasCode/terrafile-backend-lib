@@ -28,9 +28,9 @@
   },
   "homepage": "https://github.com/XasCode/terrafile#readme",
   "dependencies": {
-    "@jestaubach/cloner-git": "^0.1.12",
+    "@jestaubach/cloner-git": "^0.1.13",
     "@jestaubach/fetcher-axios": "^0.1.7",
-    "@jestaubach/fs-helpers": "^0.2.14",
+    "@jestaubach/fs-helpers": "^0.2.16",
     "axios": "^0.27.2",
     "builtin-modules": "^3.3.0",
     "chalk": "^4.1.2",
