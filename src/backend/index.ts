@@ -23,7 +23,7 @@ import {
 } from './types';
 
 import { createTargetDirectory } from './venDir';
-import chalk from 'chalk';
+import chalk from '@xascode/chalk';
 
 async function install(options: CliOptions): Promise<void> {
   console.log(chalk.blue(`Plan: (${options.file}) --> (${options.directory})`));

@@ -1,5 +1,5 @@
 import path from 'path';
-import chalk from 'chalk';
+import chalk from '@xascode/chalk';
 
 import { validOptions } from '../backend/utils';
 import { CliOptions, Option, Path, Status, Config, ExecResult, RetString, FsHelpers } from './types';

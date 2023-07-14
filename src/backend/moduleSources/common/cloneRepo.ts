@@ -1,5 +1,5 @@
 import path from 'path';
-import chalk from 'chalk';
+import chalk from '@xascode/chalk';
 
 import { ExecFileException } from 'child_process';
 import { ExecResult, Path, RepoLocation, SourceParts, Status, FsHelpers } from '../../types';

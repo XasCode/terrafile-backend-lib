@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from '@xascode/chalk';
 
 import { Entry, Path, Status, FetchParams } from '../types';
 
