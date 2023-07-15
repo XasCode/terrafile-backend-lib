@@ -14,8 +14,7 @@
     "test": "vitest run --coverage --reporter dot",
     "test-all": "vitest run --coverage --reporter dot --config vite-base.config.js",
     "lint": "eslint src",
-    "bump": "npm version patch",
-    "release": "git push --tags && npm publish"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
