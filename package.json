@@ -42,13 +42,10 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "@types/lodash": "^4.14.195",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-istanbul": "^0.33.0",
-    "eslint": "^8.21.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-json": "^3.1.0",
+    "eslint": "^8.43.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "typescript": "^5.1.6",
@@ -56,14 +53,9 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn check-eslint-config && yarn check-code"
+      "pre-commit": ".husky/pre-commit",
+      "commit-msg": ".husky/commit-msg",
+      "prepare-commit-msg": ".husky/prepare-commit-msg"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
   }
 }
