@@ -30,7 +30,7 @@
     "@jestaubach/cloner-git": "^0.1.14",
     "@jestaubach/fetcher-axios": "^0.1.8",
     "@jestaubach/fs-helpers": "^0.2.17",
-    "@xascode/chalk": "^0.1.0",
+    "@xascode/chalk": "^0.1.1",
     "builtin-modules": "^3.3.0",
     "fs-extra": "^11.1.1",
     "lodash": "^4.17.21",
