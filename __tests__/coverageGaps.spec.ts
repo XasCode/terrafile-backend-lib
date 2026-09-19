@@ -1,5 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 
+vi.mock('@jestaubach/cloner-git', () => ({
+  default: {
+    use: vi.fn(() => async () => ({ error: new Error(`mock clone failure`) })),
+  },
+}));
+vi.mock('@jestaubach/fetcher-axios', () => ({
+  default: {
+    use: vi.fn(() => async () => ({ success: false, error: `mock fetch failure` })),
+  },
+}));
+
 import { readFileContents } from '../src/backend/processFile';
 import { install } from '../src/backend';
 import { getType } from '../src/backend/moduleSources';
@@ -31,6 +42,17 @@ describe(`coverage gaps`, () => {
     const cloner = async (): Promise<ExecResult> => ({ error: new Error(`clone failed`) });
 
     const result = await cloneRepoToDest(repoUrl, `destination`, cloner, useFsHelpers());
+
+    expect(result.success).toBe(false);
+  });
+
+  it(`uses the mocked default cloner when none is provided`, async () => {
+    const result = await cloneRepoToDest(
+      repoUrl,
+      `destination`,
+      undefined as unknown as (_: string[], __?: string) => Promise<ExecResult>,
+      useFsHelpers(),
+    );
 
     expect(result.success).toBe(false);
   });
@@ -105,6 +127,34 @@ describe(`coverage gaps`, () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it(`returns a registry fetcher error`, async () => {
+    const fetcher = async (): Promise<{ success: boolean; error: string }> => ({
+      success: false,
+      error: `fetch failed`,
+    });
+
+    const result = await terraformRegistry.fetch({
+      params: { source: `namespace/name/system` },
+      dest: `destination`,
+      fetcher,
+      cloner: successfulCloner,
+      fsHelpers: useFsHelpers(),
+    });
+
+    expect(result.error).toBe(`Repo URL not found in Terraform registry. destination`);
+  });
+
+  it(`uses the mocked default registry fetcher when none is provided`, async () => {
+    const result = await terraformRegistry.fetch({
+      params: { source: `namespace/name/system` },
+      dest: `destination`,
+      cloner: successfulCloner,
+      fsHelpers: useFsHelpers(),
+    });
+
+    expect(result.error).toBe(`Repo URL not found in Terraform registry. destination`);
   });
 
   it(`rejects a registry response without the git prefix`, async () => {
