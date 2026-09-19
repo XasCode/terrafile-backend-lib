@@ -25,15 +25,16 @@ import {
 import { createTargetDirectory } from './venDir';
 import chalk from '@xascode/chalk';
 
-async function install(options: CliOptions): Promise<void> {
+async function install(options: CliOptions, createDirectory = createTargetDirectory): Promise<void> {
   console.log(chalk.blue(`Plan: (${options.file}) --> (${options.directory})`));
-  const createResult = createTargetDirectory(options);
+  const createResult = createDirectory(options);
   if (!createResult.success) {
     console.error(chalk.red(`  ! Failed - create target directory: ${options.directory}`));
-    if (createResult.saved !== null) {
-      console.error(chalk.blue(`    Restoring ${options.directory}`));
-      restoreDirectory(options.directory, options);
+    if (createResult.saved === null) {
+      return;
     }
+    console.error(chalk.blue(`    Restoring ${options.directory}`));
+    restoreDirectory(options.directory, options);
     return;
   }
   console.log(chalk.green(`  + Success - create target directory: ${options.directory}`));
