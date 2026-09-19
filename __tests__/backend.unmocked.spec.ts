@@ -27,10 +27,10 @@ describe(`read file contents should read specified json file and validate its co
   async function expectFileIssue(options: CliOptions): Promise<void> {
     const retVals = await readFileContents(options);
     expect(retVals.success).toBe(false);
-    expect(retVals.contents).toBe(null);
+    expect(retVals.contents).toBeNull();
   }
 
-  // module definition source points to non-existent terraform module
+  // expected result when provide bad file path
   it(`should err on bad terraform registry`, async () => {
     const configFile = `__tests__/testFiles/tfRegistryError.json`;
     await expectFileIssue({
@@ -55,7 +55,7 @@ describe(`read file contents should read specified json file and validate its co
     await expectFileIssue(options);
   });
 
-  // perform actual (not mocked) test of fetching module from terraform registry
+  // perform actual (not mocked) test of fetching module from terraform registry - first test
   it(`run live against teraform registry`, async () => {
     const configFile = `__tests__/testFiles/tfRegistryLive.json`;
     const options = {
@@ -66,11 +66,11 @@ describe(`read file contents should read specified json file and validate its co
       fsHelpers: useFsHelpers,
     };
     const retVals = await readFileContents(options);
-    expect(retVals.error).toBe(null);
+    expect(retVals.error).toBeNull();
     expect(retVals.success).toBe(true);
-    expect(!retVals.contents).not.toEqual(true);
+    expect(retVals.contents).not.toBeNull();
     const testJson = JSON.parse(useFsHelpers.readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(1);
+    expect(Object.keys(testJson)).toHaveLength(1);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${options.directory}/${modName}/main.tf`).value).value).toBe(true);
     }
@@ -85,11 +85,11 @@ describe(`read file contents should read specified json file and validate its co
       fsHelpers: useFsHelpers,
     };
     const retVals = await readFileContents(options);
-    expect(retVals.error).toBe(null);
+    expect(retVals.error).toBeNull();
     expect(retVals.success).toBe(true);
-    expect(retVals.contents).not.toEqual(null);
+    expect(retVals.contents).not.toBeNull();
     const testJson = JSON.parse(useFsHelpers.readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(1);
+    expect(Object.keys(testJson)).toHaveLength(1);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${options.directory}/${modName}/main.tf`).value).value).toBe(true);
     }
@@ -106,11 +106,11 @@ describe(`read file contents should read specified json file and validate its co
       fsHelpers: useFsHelpers,
     };
     const retVals = await readFileContents(options);
-    expect(retVals.error).toBe(null);
+    expect(retVals.error).toBeNull();
     expect(retVals.success).toBe(true);
-    expect(retVals.contents).not.toEqual(null);
+    expect(retVals.contents).not.toBeNull();
     const testJson = JSON.parse(useFsHelpers.readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(1);
+    expect(Object.keys(testJson)).toHaveLength(1);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${options.directory}/${modName}/main.tf`).value).value).toBe(true);
     }
@@ -127,11 +127,11 @@ describe(`read file contents should read specified json file and validate its co
       fsHelpers: useFsHelpers,
     };
     const retVals = await readFileContents(options);
-    expect(retVals.error).toBe(null);
+    expect(retVals.error).toBeNull();
     expect(retVals.success).toBe(true);
-    expect(retVals.contents).not.toEqual(null);
+    expect(retVals.contents).not.toBeNull();
     const testJson = JSON.parse(useFsHelpers.readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(1);
+    expect(Object.keys(testJson)).toHaveLength(1);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${options.directory}/${modName}/main.tf`).value).value).toBe(true);
     }
