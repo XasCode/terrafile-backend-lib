@@ -16,12 +16,41 @@ then
     exit 0
 fi
 
-# if there is no baseline, create one
-if [ ! -e .secrets.baseline ]; then
+WORDLIST_ARG=""
+if [ -f wordlist.txt ] && [ -s wordlist.txt ]; then
+  if python -c "import ahocorasick" &> /dev/null; then
+    WORDLIST_ARG="--word-list wordlist.txt"
+  else
+    echo "Warning: pyahocorasick is not installed; running without wordlist."
+  fi
+else
+  echo "Warning: wordlist.txt is missing or empty; running without wordlist."
+fi
+
+if [ -z "$WORDLIST_ARG" ] && grep -q '"file_name": "wordlist.txt"' .secrets.baseline 2>/dev/null; then
+  echo "Rebuilding baseline without wordlist..."
+  rm -f .secrets.baseline
+fi
+
+cleanup() {
+  rm -f .secrets.new
+}
+trap cleanup EXIT
+
+# if there is no valid baseline, create one
+if [ ! -s .secrets.baseline ]; then
     echo "Creating baseline..."
-    detect-secrets scan --no-verify --word-list wordlist.txt > .secrets.baseline
+    if [ -n "$WORDLIST_ARG" ]; then
+      detect-secrets scan --no-verify $WORDLIST_ARG --all-files . > .secrets.baseline
+    else
+      detect-secrets scan --no-verify --all-files . > .secrets.baseline
+    fi
 fi
 
 echo "Running detect-secrets on prepare-commit-msg..."
 # Scans the commit message.
-detect-secrets scan --no-verify --word-list wordlist.txt --string "$@" > /dev/null
+if [ -n "$WORDLIST_ARG" ]; then
+  detect-secrets scan --no-verify $WORDLIST_ARG --string "$@" > /dev/null
+else
+  detect-secrets scan --no-verify --string "$@" > /dev/null
+fi
