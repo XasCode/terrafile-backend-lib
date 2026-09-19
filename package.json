@@ -34,7 +34,7 @@
     "builtin-modules": "^3.3.0",
     "fs-extra": "^11.4.0",
     "lodash": "^4.18.1",
-    "vite": "^5.4.21",
+    "vite": "^8.3.0",
     "vite-plugin-commonjs-externals": "^0.1.4",
     "vite-plugin-dts": "^4.5.4"
   },
