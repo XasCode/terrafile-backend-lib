@@ -76,7 +76,9 @@ describe(`coverage gaps`, () => {
       },
     });
 
-    await expect(cloneRepoToDest(repoUrl, `destination`, successfulCloner, fs)).rejects.toThrow(`success`);
+    const result = await cloneRepoToDest(repoUrl, `destination`, successfulCloner, fs);
+
+    expect(result.success).toBe(false);
   });
 
   it(`reports a failed copy`, async () => {
@@ -198,6 +200,13 @@ describe(`coverage gaps`, () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it(`reports a missing target directory`, async () => {
+    vi.clearAllMocks();
+    await install({ file: `terrafile.sample.json`, fsHelpers: useFsHelpers() });
+
+    expect(console.error).toHaveBeenCalled();
   });
 
   it(`handles an install failure without a saved directory`, async () => {

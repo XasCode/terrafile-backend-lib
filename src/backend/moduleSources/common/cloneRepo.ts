@@ -2,15 +2,22 @@ import path from 'path';
 import chalk from '@xascode/chalk';
 
 import { ExecFileException } from 'child_process';
-import { ExecResult, Path, RepoLocation, SourceParts, Status, FsHelpers } from '../../types';
+import type { ExecResult, Path, RepoLocation, SourceParts, Status, FsHelpers } from '../../types';
 import gitCloner from '@jestaubach/cloner-git';
 
 const defaultGitCloner = gitCloner.use(gitCloner.default);
 
+function failedExecResult(message: string): ExecResult {
+  return {
+    error: { name: ``, message, code: -1 } as ExecFileException,
+    stdout: ``,
+    stderr: ``,
+  };
+}
+
 function determineRef(ref: string): string[] {
-  const commit = ref;
-  const branchOrTag = ref;
-  return ref?.length === 40 ? [``, commit] : [branchOrTag, ``];
+  const normalizedRef = ref ?? ``;
+  return normalizedRef.length === 40 ? [``, normalizedRef] : [normalizedRef, ``];
 }
 
 function insertGit(source: Path): Path {
@@ -55,11 +62,11 @@ async function scopeRepo(
   fullDest: Path,
   cloner: (_: string[], __?: Path) => Promise<ExecResult>,
 ): Promise<ExecResult> {
-  const sparseCmd = [`sparse-checkout`, `set`, repoDir.slice(1)];
   if (repoDir) {
+    const sparseCmd = [`sparse-checkout`, `set`, repoDir.slice(1)];
     return cloner(sparseCmd, fullDest);
   }
-  return {} as ExecResult;
+  return {};
 }
 
 async function checkoutCommit(
@@ -71,7 +78,7 @@ async function checkoutCommit(
   if (commit) {
     return cloner(commitCmd, fullDest);
   }
-  return {} as ExecResult;
+  return {};
 }
 
 const tempDirName = `__temp__`;
@@ -79,23 +86,20 @@ const tempDirName = `__temp__`;
 function renameFullDestToTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsHelpers): ExecResult {
   if (repoDir) {
     const tempDir = `${fullDest}${tempDirName}`;
-    let retVal = null;
+    let retVal: ReturnType<FsHelpers[`renameDir`]>;
     try {
       retVal = fsHelpers.renameDir(fullDest, tempDir);
-    } catch (err) {
+    } catch {
       console.log(`caught error in renameDir`);
+      retVal = { success: false };
     }
     if (!retVal.success) {
       const err = `failed to rename '${fullDest}' to '${tempDir}'`;
       console.log(chalk.red(`    ! Failed - ${err}`));
-      return {
-        error: { name: ``, message: err, code: -1 } as ExecFileException,
-        stdout: ``,
-        stderr: ``,
-      };
+      return failedExecResult(err);
     }
   }
-  return {} as ExecResult;
+  return {};
 }
 
 function moveFromTempRepoDirToFullDest([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsHelpers): ExecResult {
@@ -106,14 +110,10 @@ function moveFromTempRepoDirToFullDest([, repoDir]: RepoLocation, fullDest: Path
     if (!retVal.success) {
       const err = `failed to copy '${src}' to '${fullDest}'`;
       console.log(chalk.red(`    ! Failed - ${err}`));
-      return {
-        error: { name: ``, message: err, code: -1 } as ExecFileException,
-        stdout: ``,
-        stderr: ``,
-      };
+      return failedExecResult(err);
     }
   }
-  return {} as ExecResult;
+  return {};
 }
 
 function removeTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsHelpers): ExecResult {
@@ -123,14 +123,10 @@ function removeTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsH
     if (!retVal.success) {
       const err = `failed to delete '${tempDir}'`;
       console.log(chalk.red(`    ! Failed - ${err}`));
-      return {
-        error: { name: ``, message: err, code: -1 } as ExecFileException,
-        stdout: ``,
-        stderr: ``,
-      };
+      return failedExecResult(err);
     }
   }
-  return {} as ExecResult;
+  return {};
 }
 
 async function cloneRepoToDest(
@@ -139,11 +135,11 @@ async function cloneRepoToDest(
   cloner: (_: string[], __?: Path) => Promise<ExecResult>,
   fsHelpers: FsHelpers,
 ): Promise<Status> {
-  const retVal = {
+  const retVal: Status = {
     success: false,
     contents: null,
     error: `Error cloning repo to destination ${repoUrl} - ${fullDest}`,
-  } as Status;
+  };
   const useCloner = cloner || defaultGitCloner;
   const repoSourceParts: RepoLocation = getPartsFromHttp(repoUrl);
   const successfulCloning =
