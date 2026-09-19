@@ -20,11 +20,7 @@ WORDLIST_ARG=""
 if [ -f wordlist.txt ] && [ -s wordlist.txt ]; then
   if python -c "import ahocorasick" &> /dev/null; then
     WORDLIST_ARG="--word-list wordlist.txt"
-  else
-    echo "Warning: pyahocorasick is not installed; running without wordlist."
   fi
-else
-  echo "Warning: wordlist.txt is missing or empty; running without wordlist."
 fi
 
 if [ -z "$WORDLIST_ARG" ] && grep -q '"file_name": "wordlist.txt"' .secrets.baseline 2>/dev/null; then
