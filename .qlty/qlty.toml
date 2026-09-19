@@ -1,0 +1,17 @@
+config_version = "0"
+
+exclude_patterns = [
+  "**/node_modules/**",
+  "**/coverage/**",
+  "**/dist/**",
+  "**/.scannerwork/**",
+]
+
+test_patterns = ["**/__tests__/**", "**/*.spec.ts"]
+
+[smells.duplication]
+filter_patterns = ["**/*.spec.ts"]
+
+[[source]]
+name = "default"
+default = true

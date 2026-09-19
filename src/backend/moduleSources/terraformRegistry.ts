@@ -10,13 +10,9 @@ const defaultAxiosFetcher = axiosFetcher.use(axiosFetcher.default);
 const registryURL = `https://registry.terraform.io/v1/modules`;
 
 function match(source: string): ModulesKeyType | `` {
-  return !startsWith(source, `/`) &&
-    !startsWith(source, `./`) &&
-    !startsWith(source, `../`) &&
-    !startsWith(source, `git@`) &&
-    !startsWith(source, `https://`)
-    ? `terraformRegistry`
-    : ``;
+  const isLocal = startsWith(source, `/`) || startsWith(source, `./`) || startsWith(source, `../`);
+  const isGit = startsWith(source, `git@`) || startsWith(source, `https://`);
+  return !isLocal && !isGit ? `terraformRegistry` : ``;
 }
 
 function stripGitPrefixFromRepoUrl(terraformRegistryGitUrl: string): RetString {
