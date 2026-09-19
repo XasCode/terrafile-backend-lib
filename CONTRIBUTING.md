@@ -1,42 +1,46 @@
 # Release Process
 
-Adapted from "Standard" Release Process described [here](https://cloudfour.com/thinks/how-to-publish-an-updated-version-of-an-npm-package/).
+Adapted from the "Standard" release process described in [this Cloud Four article on publishing an updated version of an npm package](https://cloudfour.com/thinks/how-to-publish-an-updated-version-of-an-npm-package/).
 
-## Safety Checks
+## Build
 
-1. git pull
-2. git status
-3. npm ci
-4. npm test
+### Safety Checks
 
-## Prepare the release
+- git pull
+- git status
+- npm ci
+- npm test
 
-5. npm run build
+### Prepare the release
 
-## Update the version number
+- npm run build
 
-6. npm version [patch|minor|major]
+### Update the version number
 
-## Publish to npm
+- npm version [patch|minor|major]
 
-7. npm publish --access=public
+## Publish
 
-## git push
+### Publish to npm
 
-8. git push -u origin --tags
+- npm publish --access=public
 
-# Debugging
+### git push
 
-## Make changes available for use
+- git push -u origin --tags
 
-1. npm run build
-2. npm link
+## Debugging
 
-## Use as a dependency in another project
+### Make changes available for use
 
-3. npm link ../terrafile-backend-lib
-4. (test changes)
+- npm run build
+- npm link
 
-## Uninstall linked dependency
+### Use as a dependency in another project
 
-5. npm unlink ../terrafile-backend-lib
+- npm link ../terrafile-backend-lib
+- (test changes)
+
+### Uninstall linked dependency
+
+- npm unlink ../terrafile-backend-lib
