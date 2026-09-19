@@ -2,8 +2,8 @@
 
 ## Badges
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/0a50ed5257e834118016/test_coverage)](https://codeclimate.com/github/XasCode/terrafile-backend-lib/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/0a50ed5257e834118016/maintainability)](https://codeclimate.com/github/XasCode/terrafile-backend-lib/maintainability)
+[![Maintainability](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib/maintainability.svg)](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib)
+[![Code Coverage](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib/coverage.svg)](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/75b022a40cb24c69a41bbee957447370)](https://www.codacy.com/gh/XasCode/terrafile-backend-lib/dashboard?utm_source=github.com&utm_medium=referral&utm_content=XasCode/terrafile-backend-lib&utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/75b022a40cb24c69a41bbee957447370)](https://app.codacy.com/gh/XasCode/terrafile-backend-lib/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Known Vulnerabilities](https://snyk.io/test/github/xascode/terrafile-backend-lib/badge.svg)](https://snyk.io/test/github/xascode/terrafile-backend-lib)
