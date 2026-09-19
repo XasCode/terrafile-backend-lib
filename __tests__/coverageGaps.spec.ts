@@ -18,7 +18,7 @@ import { cloneRepoToDest } from '../src/backend/moduleSources/common/cloneRepo';
 import local from '../src/backend/moduleSources/local';
 import terraformRegistry from '../src/backend/moduleSources/terraformRegistry';
 import fsHelpers from '@jestaubach/fs-helpers';
-import { ExecResult, FsHelpers } from '../src/backend';
+import { ExecResult, FsHelpers, RetString } from '../src/backend';
 import * as spy from '../src/spy';
 
 const mockedFsHelpers = fsHelpers.use(fsHelpers.mock);
@@ -36,6 +36,10 @@ function useFsHelpers(overrides: Partial<FsHelpers> = {}): FsHelpers {
 }
 
 const successfulCloner = async (): Promise<ExecResult> => ({});
+const successfulFetcher = async (_config: Record<string, string>): Promise<RetString> => ({
+  success: true,
+  value: `git::https://github.com/example/repository.git`,
+});
 
 describe(`coverage gaps`, () => {
   it(`reports a failed clone`, async () => {
@@ -107,7 +111,7 @@ describe(`coverage gaps`, () => {
     const result = await terraformRegistry.fetch({
       params: { source: `` },
       dest: `destination`,
-      fetcher: successfulCloner,
+      fetcher: successfulFetcher,
       cloner: successfulCloner,
       fsHelpers: useFsHelpers(),
     });
@@ -150,6 +154,7 @@ describe(`coverage gaps`, () => {
     const result = await terraformRegistry.fetch({
       params: { source: `namespace/name/system` },
       dest: `destination`,
+      fetcher: undefined as unknown as (_config: Record<string, string>) => Promise<RetString>,
       cloner: successfulCloner,
       fsHelpers: useFsHelpers(),
     });
@@ -187,7 +192,7 @@ describe(`coverage gaps`, () => {
     const result = await local.fetch({
       params: { source: `./missing` },
       dest: `destination`,
-      fetcher: successfulCloner,
+      fetcher: successfulFetcher,
       cloner: successfulCloner,
       fsHelpers: fs,
     });
@@ -201,7 +206,7 @@ describe(`coverage gaps`, () => {
       file: `terrafile.sample.json`,
       directory: `coverage-missing-save`,
       fsHelpers: useFsHelpers(),
-    }, () => ({ success: false, saved: null }));
+    }, () => ({ success: false, saved: undefined }));
 
     expect(console.error).toHaveBeenCalled();
   });
@@ -222,7 +227,7 @@ describe(`coverage gaps`, () => {
       file: `missing-terrafile.json`,
       directory: `coverage-processing-failure`,
       fsHelpers: useFsHelpers(),
-    }, () => ({ success: true, saved: null }));
+    }, () => ({ success: true, saved: undefined }));
 
     expect(console.log).toHaveBeenCalled();
   });

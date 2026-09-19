@@ -1,6 +1,8 @@
 import { readFileContents } from './processFile';
 import { restoreDirectory } from './restore';
-import {
+import type { CliOptions } from './types';
+
+export type {
   Backend,
   CliArgs,
   CliOptions,
@@ -26,24 +28,31 @@ import { createTargetDirectory } from './venDir';
 import chalk from '@xascode/chalk';
 
 async function install(options: CliOptions, createDirectory = createTargetDirectory): Promise<void> {
-  console.log(chalk.blue(`Plan: (${options.file}) --> (${options.directory})`));
-  const createResult = createDirectory(options);
-  if (!createResult.success) {
-    console.error(chalk.red(`  ! Failed - create target directory: ${options.directory}`));
-    if (createResult.saved === null) {
-      return;
-    }
-    console.error(chalk.blue(`    Restoring ${options.directory}`));
-    restoreDirectory(options.directory, options);
+  if (!options.directory) {
+    console.error(chalk.red(`  ! Target directory is required`));
     return;
   }
-  console.log(chalk.green(`  + Success - create target directory: ${options.directory}`));
+
+  const directory = options.directory;
+
+  console.log(chalk.blue(`Plan: (${options.file}) --> (${directory})`));
+  const createResult = createDirectory(options);
+  if (!createResult.success) {
+    console.error(chalk.red(`  ! Failed - create target directory: ${directory}`));
+    if (!createResult.saved) {
+      return;
+    }
+    console.error(chalk.blue(`    Restoring ${directory}`));
+    restoreDirectory(directory, options);
+    return;
+  }
+  console.log(chalk.green(`  + Success - create target directory: ${directory}`));
   const retVals = await readFileContents(options);
   if (!retVals.success) {
     console.log(chalk.red(`  ! Failed - process terrafile: ${options.file}`));
-    if (createResult.saved !== null) {
-      console.log(chalk.blue(`    Restoring ${options.directory}`));
-      restoreDirectory(options.directory, options);
+    if (createResult.saved) {
+      console.log(chalk.blue(`    Restoring ${directory}`));
+      restoreDirectory(directory, options);
     }
     return;
   }
@@ -51,24 +60,3 @@ async function install(options: CliOptions, createDirectory = createTargetDirect
 }
 
 export { install };
-export type {
-  Backend,
-  CliArgs,
-  CliOptions,
-  Config,
-  Entry,
-  ExecResult,
-  FetchParams,
-  FsHelpers,
-  Option,
-  Path,
-  RepoLocation,
-  Request,
-  Response,
-  RetBool,
-  RetString,
-  RetVal,
-  RetPath,
-  SourceParts,
-  Status,
-};
