@@ -33,8 +33,8 @@ describe(`createTargetDirectory should create a directory for vendor modules`, (
   function expectDirIssue(options: CliOptions): void {
     const retVals = createTargetDirectory(options);
     expect(retVals.success).toBe(false);
-    expect(retVals.created).toBe(null);
-    expect(retVals.saved).toBe(null);
+    expect(retVals.created).toBeNull();
+    expect(retVals.saved).toBeNull();
   }
 
   it(`should create the target directory when provided a relative path`, () => {
@@ -46,7 +46,7 @@ describe(`createTargetDirectory should create a directory for vendor modules`, (
     expect(checkIfDirExists(getAbsolutePath(installDir).value).value).toBe(true);
     expect(retVals.success).toBe(true);
     expect(retVals.created).toBe(getAbsolutePath(`ok_vendor_a`).value);
-    expect(retVals.saved).toBe(null);
+    expect(retVals.saved).toBeNull();
   });
 
   it(`should create the target directory when provided an absolute path`, () => {
@@ -58,7 +58,7 @@ describe(`createTargetDirectory should create a directory for vendor modules`, (
     expect(checkIfDirExists(installDir).value).toBe(true);
     expect(retVals.success).toBe(true);
     expect(retVals.created).toBe(resolve(installDir, `..`));
-    expect(retVals.saved).toBe(null);
+    expect(retVals.saved).toBeNull();
   });
 
   it(`should create the target directory and save <path> when directory already exists`, () => {

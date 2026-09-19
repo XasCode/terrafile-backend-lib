@@ -1,6 +1,4 @@
-import { ExecFileException } from 'child_process';
-
-type Path = string;
+import { ExecFileException } from 'node:child_process';
 
 type Backend = {
   install(_: CliOptions): void;
@@ -18,8 +16,8 @@ type CliArgs = {
   ver?: string;
   help?: string;
   badOption?: string;
-  directory?: Path;
-  file?: Path;
+  directory?: string;
+  file?: string;
 };
 
 type FsHelpers = {
@@ -35,18 +33,18 @@ type FsHelpers = {
 };
 
 type CliOptions = {
-  directory?: Path;
-  file?: Path;
+  directory?: string;
+  file?: string;
   fetcher?: (_: Config) => Promise<RetString>;
-  cloner?: (_: string[], __?: Path) => Promise<ExecResult>;
+  cloner?: (_: string[], __?: string) => Promise<ExecResult>;
   fsHelpers?: FsHelpers;
-  createDir?: (_: Path) => Path;
+  createDir?: (_: string) => string;
 };
 
 type Status = {
   success: boolean;
-  saved?: Path;
-  created?: Path;
+  saved?: string;
+  created?: string;
   error?: string | null;
   contents?: [string, Record<string, string>][];
   options?: CliOptions;
@@ -58,7 +56,7 @@ type Status = {
   parse?: () => Status;
   validateJson?: () => Status;
   fetcher?: (_: Config) => Promise<RetString>;
-  cloner?: (_: string[], __?: Path) => Promise<ExecResult>;
+  cloner?: (_: string[], __?: string) => Promise<ExecResult>;
   fsHelpers?: FsHelpers;
 };
 
@@ -70,7 +68,7 @@ type Entry = {
   path?: string;
 };
 
-type RepoLocation = [Path, Path, string, string];
+type RepoLocation = [string, string, string, string];
 
 type SourceParts = string[];
 
@@ -88,7 +86,7 @@ interface RetBool extends RetVal {
 }
 
 interface RetPath extends RetVal {
-  value?: Path;
+  value?: string;
 }
 
 type Config = Record<string, string>;
@@ -105,9 +103,9 @@ type Response = {
 
 type FetchParams = {
   params: Entry;
-  dest: Path;
+  dest: string;
   fetcher: (_: Config) => Promise<RetString>;
-  cloner: (_: string[], __?: Path) => Promise<ExecResult>;
+  cloner: (_: string[], __?: string) => Promise<ExecResult>;
   fsHelpers: FsHelpers;
 };
 
@@ -121,7 +119,6 @@ export type {
   FetchParams,
   FsHelpers,
   Option,
-  Path,
   RepoLocation,
   Request,
   Response,

@@ -12,7 +12,6 @@ export type {
   FetchParams,
   FsHelpers,
   Option,
-  Path,
   RepoLocation,
   Request,
   Response,

@@ -1,7 +1,7 @@
 import { getSaveLocation } from '../backend/venDir';
-import { Path, Status, CliOptions } from './types';
+import { Status, CliOptions } from './types';
 
-function restoreExistingDir(installDir: Path, options: CliOptions): Path {
+function restoreExistingDir(installDir: string, options: CliOptions): string {
   let retVal = null;
   const saveLocation = getSaveLocation(installDir);
   if (options.fsHelpers.checkIfDirExists(saveLocation).value) {
@@ -12,7 +12,7 @@ function restoreExistingDir(installDir: Path, options: CliOptions): Path {
   return retVal;
 }
 
-function restoreDirectory(installDir: Path, options: CliOptions): Status {
+function restoreDirectory(installDir: string, options: CliOptions): Status {
   const retVals = { success: false, saved: null, created: null } as Status;
   const absInstallDir = options.fsHelpers.getAbsolutePath(installDir).value;
   const restored = restoreExistingDir(absInstallDir, options);

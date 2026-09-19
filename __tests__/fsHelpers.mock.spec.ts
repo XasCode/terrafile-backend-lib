@@ -45,7 +45,7 @@ describe(`createDir should create a directory at the provided location`, () => {
 
   it(`should raise error if provided a path to a file`, () => {
     const createdDirsStartingLocation = fsHelpers.createDir(fsHelpers.getAbsolutePath(`LICENSE`).value).value;
-    expect(createdDirsStartingLocation).toBe(undefined);
+    expect(createdDirsStartingLocation).toBeUndefined();
     expect(console.error).toHaveBeenLastCalledWith(`Error creating dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
     expect(console.log).not.toHaveBeenCalled();
   });
@@ -72,7 +72,7 @@ describe(`rimrafDir should delete a dir and its contents`, () => {
   it(`should error when attempting to delete a directory that doesn't exist`, () => {
     const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`sOmEtHiNg`).value);
     expect(deletedDir.success).toEqual(false);
-    expect(deletedDir.value).toEqual(undefined);
+    expect(deletedDir.value).toBeUndefined();
     expect(deletedDir.error).toContain(`Error deleting dir:`);
     expect(console.error).not.toHaveBeenLastCalledWith(`Error deleting dir: ${`sOmEtHiNg`}`);
     expect(fsHelpers.checkIfDirExists(`sOmEtHiNg`).value).toBe(false);
@@ -81,7 +81,7 @@ describe(`rimrafDir should delete a dir and its contents`, () => {
   it(`should error when attempting to delete a directory that is not a dir`, () => {
     const deletedDir = fsHelpers.rimrafDir(fsHelpers.getAbsolutePath(`LICENSE`).value);
     expect(deletedDir.success).toEqual(false);
-    expect(deletedDir.value).toEqual(undefined);
+    expect(deletedDir.value).toBeUndefined();
     expect(deletedDir.error).toContain(`Error deleting dir:`);
     expect(console.error).toHaveBeenLastCalledWith(`Error deleting dir: ${fsHelpers.getAbsolutePath(`LICENSE`).value}`);
     expect(

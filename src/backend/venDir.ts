@@ -1,16 +1,16 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import { validOptions } from '../backend/utils';
-import { CliOptions, Option, Path, Status } from './types';
+import { CliOptions, Option, Status } from './types';
 
-function cleanUpOldSaveLocation(dir: Path, options: CliOptions): void {
+function cleanUpOldSaveLocation(dir: string, options: CliOptions): void {
   options.fsHelpers.rimrafDir(dir);
 }
 
-function getSaveLocation(dir: Path): Path {
+function getSaveLocation(dir: string): string {
   return path.resolve(dir, `..`, `.terrafile.save`);
 }
 
-function renameExistingDir(installDir: Path, options: CliOptions): Path {
+function renameExistingDir(installDir: string, options: CliOptions): string {
   let retVal = null;
   if (options.fsHelpers.checkIfDirExists(installDir).value) {
     const saveLocation = getSaveLocation(installDir);
@@ -21,14 +21,14 @@ function renameExistingDir(installDir: Path, options: CliOptions): Path {
   return retVal;
 }
 
-function createNewDir(installDir: Path, options: CliOptions): Path {
+function createNewDir(installDir: string, options: CliOptions): string {
   const createdStartingAt = options.fsHelpers.createDir(installDir).value;
-  return createdStartingAt !== undefined ? createdStartingAt : null;
+  return createdStartingAt ?? null;
 }
 
 function createTargetDirectory(options: CliOptions): Status {
   const retVals: Status = { success: false, saved: null, created: null };
-  const useCreateDir = options && options.createDir ? options.createDir : createNewDir;
+  const useCreateDir = options?.createDir ?? createNewDir;
   if (validOptions(options, `directory` as Option)) {
     const installDir = options.fsHelpers.getAbsolutePath(options.directory).value;
     retVals.saved = renameExistingDir(installDir, options);

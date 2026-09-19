@@ -48,11 +48,11 @@ describe(`read file contents should read specified json file and validate its co
       cloner: useCloner,
       fsHelpers: useFsHelpers,
     });
-    expect(retVals.error).toBe(null);
+    expect(retVals.error).toBeNull();
     expect(retVals.success).toBe(true);
-    expect(retVals.contents).not.toEqual(null);
+    expect(retVals.contents).not.toBeNull();
     const testJson = await JSON.parse(readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(31);
+    expect(Object.keys(testJson)).toHaveLength(31);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`err_vendor1/modules/${modName}/main.tf`).value).value).toEqual(true);
     }
@@ -68,9 +68,9 @@ describe(`read file contents should read specified json file and validate its co
       fsHelpers: useFsHelpers,
     });
     expect(retVals.success).toBe(true);
-    expect(retVals.contents).not.toEqual(null);
+    expect(retVals.contents).not.toBeNull();
     const testJson = await JSON.parse(readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(31);
+    expect(Object.keys(testJson)).toHaveLength(31);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`err_vendor2/modules/${modName}/main.tf`).value).value).toEqual(true);
     }
@@ -86,11 +86,11 @@ describe(`read file contents should read specified json file and validate its co
       cloner: useCloner,
       fsHelpers: useFsHelpers,
     });
-    expect(retVals.error).toBe(null);
+    expect(retVals.error).toBeNull();
     expect(retVals.success).toBe(true);
-    expect(retVals.contents).not.toEqual(null);
+    expect(retVals.contents).not.toBeNull();
     const testJson = await JSON.parse(readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(7);
+    expect(Object.keys(testJson)).toHaveLength(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }

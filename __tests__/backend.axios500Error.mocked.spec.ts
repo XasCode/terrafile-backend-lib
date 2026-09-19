@@ -23,7 +23,7 @@ const cleanUpTestDirs = () => {
 async function expectFileIssue(options: CliOptions): Promise<void> {
   const retVals = await readFileContents(options);
   expect(retVals.success).toBe(false);
-  expect(retVals.contents).toBe(null);
+  expect(retVals.contents).toBeNull();
 }
 
 describe(`read file contents should read specified json file and validate its contents`, () => {

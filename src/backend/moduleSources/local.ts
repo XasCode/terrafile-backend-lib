@@ -1,9 +1,9 @@
 import { startsWith } from './common/startsWith';
-import { Path, Status, FetchParams } from '../types';
+import { Status, FetchParams } from '../types';
 import type { ModulesKeyType } from './';
 import Validate from './common/validate';
 
-function match(source: Path): ModulesKeyType | `` {
+function match(source: string): ModulesKeyType | `` {
   return startsWith(source, `/`) || startsWith(source, `./`) || startsWith(source, `../`) ? `local` : ``;
 }
 

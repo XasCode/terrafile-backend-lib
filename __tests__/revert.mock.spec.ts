@@ -1,6 +1,6 @@
 import { getPartsFromHttp } from '../src/backend/moduleSources/common/cloneRepo';
 import Git from '../src/backend/moduleSources/common/git';
-import { Path, ExecResult } from '../src/backend';
+import { ExecResult } from '../src/backend';
 import { beforeAll, afterAll, afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 
 import { install } from '../src/backend';
@@ -39,7 +39,7 @@ describe(`test backend's ability to revert on error`, async () => {
 
     // verify expected directories exist
     const testJson = JSON.parse(readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(7);
+    expect(Object.keys(testJson)).toHaveLength(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
@@ -54,7 +54,7 @@ describe(`test backend's ability to revert on error`, async () => {
     });
 
     // verify expected directories exist; re-use testJson
-    expect(Object.keys(testJson).length).toBe(7);
+    expect(Object.keys(testJson)).toHaveLength(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
@@ -71,14 +71,14 @@ describe(`test backend's ability to revert on error`, async () => {
       fetcher: fetcher.use(fetcher.mock),
       cloner: cloner.use(cloner.mockError() as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
-      createDir: (_: Path) => {
+      createDir: (_: string) => {
         return null;
       },
     });
 
     // verify expected directories exist; re-use testJson
     const testJson = JSON.parse(readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(7);
+    expect(Object.keys(testJson)).toHaveLength(7);
     for (const modName of Object.keys(testJson)) {
       const params = testJson[modName];
       const newUrl = replaceUrlVersionIfVersionParam(params.source, params.version);
@@ -104,7 +104,7 @@ describe(`test backend's ability to revert on error`, async () => {
 
     // verify expected directories exist
     const testJson = JSON.parse(readFile(getAbsolutePath(configFile).value).value);
-    expect(Object.keys(testJson).length).toBe(7);
+    expect(Object.keys(testJson)).toHaveLength(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }
@@ -116,13 +116,13 @@ describe(`test backend's ability to revert on error`, async () => {
       fetcher: fetcher.use(fetcher.mock),
       cloner: cloner.use(cloner.mockError() as (_: string[], __?: string) => Promise<ExecResult>),
       fsHelpers: mockedFsHelpers,
-      createDir: (_: Path) => {
+      createDir: (_: string) => {
         return null;
       },
     });
 
     // verify expected directories exist; re-use testJson
-    expect(Object.keys(testJson).length).toBe(7);
+    expect(Object.keys(testJson)).toHaveLength(7);
     for (const modName of Object.keys(testJson)) {
       expect(checkIfFileExists(getAbsolutePath(`${destination}/${modName}/main.tf`).value).value).toEqual(true);
     }

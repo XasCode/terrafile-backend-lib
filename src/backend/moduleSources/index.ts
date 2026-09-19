@@ -1,6 +1,6 @@
 import chalk from '@xascode/chalk';
 
-import { Entry, Path, Status, FetchParams } from '../types';
+import { Entry, Status, FetchParams } from '../types';
 
 import local from './local';
 import gitHttps from './gitHttps';
@@ -16,7 +16,7 @@ const modules = {
 
 type ModulesKeyType = keyof typeof modules;
 
-function getType(source: Path): ModulesKeyType {
+function getType(source: string): ModulesKeyType {
   return source === undefined
     ? undefined
     : (Object.values(modules)

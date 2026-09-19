@@ -1,5 +1,5 @@
 import { startsWith } from './common/startsWith';
-import { Path, RetString, Status, Config, FetchParams } from '../types';
+import { RetString, Status, Config, FetchParams } from '../types';
 import { cloneRepoToDest } from './common/cloneRepo';
 import type { ModulesKeyType } from './';
 import axiosFetcher from '@jestaubach/fetcher-axios';
@@ -9,7 +9,7 @@ const defaultAxiosFetcher = axiosFetcher.use(axiosFetcher.default);
 
 const registryURL = `https://registry.terraform.io/v1/modules`;
 
-function match(source: Path): ModulesKeyType | `` {
+function match(source: string): ModulesKeyType | `` {
   return !startsWith(source, `/`) &&
     !startsWith(source, `./`) &&
     !startsWith(source, `../`) &&
@@ -19,14 +19,14 @@ function match(source: Path): ModulesKeyType | `` {
     : ``;
 }
 
-function stripGitPrefixFromRepoUrl(terraformRegistryGitUrl: Path): RetString {
+function stripGitPrefixFromRepoUrl(terraformRegistryGitUrl: string): RetString {
   if (terraformRegistryGitUrl.includes(`git::`)) {
     return { success: true, value: terraformRegistryGitUrl.split(`git::`)[1] };
   }
   return { success: false, error: `Expected location '${terraformRegistryGitUrl}' to begin with 'git::'` };
 }
 
-function getRepoUrl(terraformRegistryGitUrl: Path): RetString {
+function getRepoUrl(terraformRegistryGitUrl: string): RetString {
   if (terraformRegistryGitUrl !== undefined) {
     return stripGitPrefixFromRepoUrl(terraformRegistryGitUrl);
   }
@@ -36,7 +36,7 @@ function getRepoUrl(terraformRegistryGitUrl: Path): RetString {
   };
 }
 
-async function getRegRepoUrl(downloadPointerUrl: Path, fetcher: (_: Config) => Promise<RetString>): Promise<RetString> {
+async function getRegRepoUrl(downloadPointerUrl: string, fetcher: (_: Config) => Promise<RetString>): Promise<RetString> {
   const useFetcher = fetcher || defaultAxiosFetcher;
   const fetcherResult = await useFetcher({ url: downloadPointerUrl });
   if (fetcherResult.success) {
@@ -45,7 +45,7 @@ async function getRegRepoUrl(downloadPointerUrl: Path, fetcher: (_: Config) => P
   return fetcherResult;
 }
 
-function getRegDownloadPointerUrl(source: Path, version: string): Path {
+function getRegDownloadPointerUrl(source: string, version: string): string {
   // https://www.terraform.io/docs/internals/module-registry-protocol.html
   const [namespace, name, system] = source.split(`/`);
   return `${registryURL}/${namespace}/${name}/${system}/${version}/download`;
@@ -53,11 +53,11 @@ function getRegDownloadPointerUrl(source: Path, version: string): Path {
 
 async function copyFromTerraformRegistry({ params, dest, fetcher, cloner, fsHelpers }: FetchParams): Promise<Status> {
   if (params.source.length === 0) {
-    return Promise.resolve({
+    return {
       success: false,
       contents: null,
       error: `Repo URL empty string`,
-    });
+    };
   }
   const downloadPointerUrl = getRegDownloadPointerUrl(params.source, params.version || ``);
   const regRepoUrl = await getRegRepoUrl(downloadPointerUrl, fetcher);

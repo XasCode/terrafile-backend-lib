@@ -1,8 +1,8 @@
-import path from 'path';
+import path from 'node:path';
 import chalk from '@xascode/chalk';
 
 import { validOptions } from '../backend/utils';
-import { CliOptions, Option, Path, Status, Config, ExecResult, RetString, FsHelpers } from './types';
+import { CliOptions, Option, Status, Config, ExecResult, RetString, FsHelpers } from './types';
 import { validate, fetch } from '../backend/moduleSources';
 
 function Terrafile(options: CliOptions): Status {
@@ -33,7 +33,8 @@ function Terrafile(options: CliOptions): Status {
     try {
       this.json = JSON.parse(opts.fsHelpers.readFile(this.options.file).value);
       console.log(chalk.green(`  + Success - read file: ${this.options?.file}`));
-    } catch (err) {
+    } catch {
+      // Parsing failures are converted into the public Status error result.
       this.success = false;
       this.contents = null;
       this.error = `Error: could not parse ${this.options?.file}`;
@@ -46,7 +47,8 @@ function Terrafile(options: CliOptions): Status {
     try {
       this.contents = Object.entries(this.json);
       console.log(chalk.green(`  + Success - parse json`));
-    } catch (err) {
+    } catch {
+      // Invalid parsed data is converted into the public Status error result.
       this.success = false;
       this.contents = [];
       this.error = `Error: could not parse json appropriately`;
@@ -79,9 +81,9 @@ function Terrafile(options: CliOptions): Status {
 
   async function fetchModules(
     contents: [string, Record<string, string>][],
-    dir: Path,
+    dir: string,
     fetcher: (_: Config) => Promise<RetString>,
-    cloner: (_: string[], __?: Path) => Promise<ExecResult>,
+    cloner: (_: string[], __?: string) => Promise<ExecResult>,
     fsHelpers: FsHelpers,
   ): Promise<Status[]> {
     return Promise.all(

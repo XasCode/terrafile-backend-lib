@@ -1,8 +1,8 @@
-import path from 'path';
+import path from 'node:path';
 import chalk from '@xascode/chalk';
 
-import { ExecFileException } from 'child_process';
-import type { ExecResult, Path, RepoLocation, SourceParts, Status, FsHelpers } from '../../types';
+import { ExecFileException } from 'node:child_process';
+import type { ExecResult, RepoLocation, SourceParts, Status, FsHelpers } from '../../types';
 import gitCloner from '@jestaubach/cloner-git';
 
 const defaultGitCloner = gitCloner.use(gitCloner.default);
@@ -20,15 +20,16 @@ function determineRef(ref: string): string[] {
   return normalizedRef.length === 40 ? [``, normalizedRef] : [normalizedRef, ``];
 }
 
-function insertGit(source: Path): Path {
+function insertGit(source: string): string {
   const parts = source.split(`?ref=`);
   return parts.length < 2 || source.includes(`.git`) ? source : [parts[0], `.git`, `?ref=`, ...parts.slice(1)].join(``);
 }
 
-function sourceParts(source: Path): SourceParts {
+function sourceParts(source: string): SourceParts {
   const tempSource = insertGit(source);
   const [beforeGit, afterGit] = tempSource.split(`.git`);
-  const newSource = `${beforeGit}${source.includes(`.git`) ? `.git` : ``}`;
+  const gitSuffix = source.includes(`.git`) ? `.git` : ``;
+  const newSource = [beforeGit, gitSuffix].join(``);
   const newAfterGit = afterGit || ``;
   const [beforeQref, afterQref] = newAfterGit.split(`?ref=`);
   const [, afterPathSep] = beforeQref.split(`//`);
@@ -36,7 +37,7 @@ function sourceParts(source: Path): SourceParts {
   return [newSource, newPathPart, afterQref];
 }
 
-function getPartsFromHttp(source: Path): RepoLocation {
+function getPartsFromHttp(source: string): RepoLocation {
   const [repo, repoDir, ref] = sourceParts(source);
   const [branchOrTag, commit] = determineRef(ref);
   return [repo, repoDir, branchOrTag, commit];
@@ -44,8 +45,8 @@ function getPartsFromHttp(source: Path): RepoLocation {
 
 async function cloneRepo(
   [repo, repoDir, branchOrTag]: RepoLocation,
-  fullDest: Path,
-  cloner: (_: string[], __?: Path) => Promise<ExecResult>,
+  fullDest: string,
+  cloner: (_: string[], __?: string) => Promise<ExecResult>,
 ): Promise<ExecResult> {
   const cloneCmd = [
     `clone`,
@@ -59,8 +60,8 @@ async function cloneRepo(
 
 async function scopeRepo(
   [, repoDir]: RepoLocation,
-  fullDest: Path,
-  cloner: (_: string[], __?: Path) => Promise<ExecResult>,
+  fullDest: string,
+  cloner: (_: string[], __?: string) => Promise<ExecResult>,
 ): Promise<ExecResult> {
   if (repoDir) {
     const sparseCmd = [`sparse-checkout`, `set`, repoDir.slice(1)];
@@ -71,8 +72,8 @@ async function scopeRepo(
 
 async function checkoutCommit(
   [, , , commit]: RepoLocation,
-  fullDest: Path,
-  cloner: (_: string[], __?: Path) => Promise<ExecResult>,
+  fullDest: string,
+  cloner: (_: string[], __?: string) => Promise<ExecResult>,
 ): Promise<ExecResult> {
   const commitCmd = [`checkout`, commit];
   if (commit) {
@@ -83,7 +84,7 @@ async function checkoutCommit(
 
 const tempDirName = `__temp__`;
 
-function renameFullDestToTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsHelpers): ExecResult {
+function renameFullDestToTempDir([, repoDir]: RepoLocation, fullDest: string, fsHelpers: FsHelpers): ExecResult {
   if (repoDir) {
     const tempDir = `${fullDest}${tempDirName}`;
     let retVal: ReturnType<FsHelpers[`renameDir`]>;
@@ -102,7 +103,7 @@ function renameFullDestToTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHe
   return {};
 }
 
-function moveFromTempRepoDirToFullDest([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsHelpers): ExecResult {
+function moveFromTempRepoDirToFullDest([, repoDir]: RepoLocation, fullDest: string, fsHelpers: FsHelpers): ExecResult {
   if (repoDir) {
     const tempDir = `${fullDest}${tempDirName}`;
     const src = fsHelpers.getAbsolutePath(`${tempDir}${path.sep}${repoDir}`).value;
@@ -116,7 +117,7 @@ function moveFromTempRepoDirToFullDest([, repoDir]: RepoLocation, fullDest: Path
   return {};
 }
 
-function removeTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsHelpers): ExecResult {
+function removeTempDir([, repoDir]: RepoLocation, fullDest: string, fsHelpers: FsHelpers): ExecResult {
   if (repoDir) {
     const tempDir = `${fullDest}${tempDirName}`;
     const retVal = fsHelpers.rimrafDir(tempDir);
@@ -130,9 +131,9 @@ function removeTempDir([, repoDir]: RepoLocation, fullDest: Path, fsHelpers: FsH
 }
 
 async function cloneRepoToDest(
-  repoUrl: Path,
-  fullDest: Path,
-  cloner: (_: string[], __?: Path) => Promise<ExecResult>,
+  repoUrl: string,
+  fullDest: string,
+  cloner: (_: string[], __?: string) => Promise<ExecResult>,
   fsHelpers: FsHelpers,
 ): Promise<Status> {
   const retVal: Status = {
