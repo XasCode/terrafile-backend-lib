@@ -44,12 +44,12 @@
     "@types/lodash": "^4.17.25",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
-    "@vitest/coverage-istanbul": "^2.1.9",
+    "@vitest/coverage-istanbul": "^5.0.3",
     "eslint": "^9.39.5",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "typescript": "^5.9.3",
-    "vitest": "^2.1.9"
+    "vitest": "^5.0.3"
   },
   "husky": {
     "hooks": {
