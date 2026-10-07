@@ -12,6 +12,7 @@
   "scripts": {
     "build": "tsc && vite build",
     "test": "vitest run --coverage --reporter dot",
+    "test:built": "npm run build && node --test __tests__/built-package.smoke.test.mjs",
     "test-all": "vitest run --coverage --reporter dot --config vite-base.config.js",
     "lint": "eslint \"src/**/*.ts\"",
     "prepare": "husky install"

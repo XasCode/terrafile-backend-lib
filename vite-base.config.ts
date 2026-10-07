@@ -10,13 +10,20 @@ import commonjsExternals from 'vite-plugin-commonjs-externals';
 
 const { escapeRegExp } = lodash;
 
+const dependencyExternals = Object.keys(pkg.dependencies).map(
+  (name) => new RegExp('^' + escapeRegExp(name) + '(\\/.+)?$'),
+);
 const externals = [
   ...builtinModules,
-  ...Object.keys(pkg.dependencies).map((name) => new RegExp('^' + escapeRegExp(name) + '(\\/.+)?$')),
+  ...builtinModules.map((module) => `node:${module}`),
+  ...dependencyExternals,
 ];
 
 export default defineConfig({
   build: {
+    rollupOptions: {
+      external: externals,
+    },
     lib: {
       name: 'terrafile-backend-lib',
       fileName: 'terrafile-backend-lib',
@@ -29,8 +36,17 @@ export default defineConfig({
   plugins: [
     dts(),
     commonjsExternals({
-      externals,
+      externals: dependencyExternals,
     }),
+    {
+      name: 'esm-external-require',
+      renderChunk(code, _chunk, outputOptions) {
+        if (outputOptions.format !== 'es') {
+          return null;
+        }
+        return `import { createRequire as __createRequire } from 'node:module';\nconst require = __createRequire(import.meta.url);\n${code}`;
+      },
+    },
   ],
   test: {
     setupFiles: './__tests__/testUtils/testSetupFile.ts',
