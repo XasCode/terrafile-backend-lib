@@ -1,33 +1,27 @@
 #!/usr/bin/env bash
-. "$(dirname -- "$0")/_/husky.sh"
+set -euo pipefail
 
-# Check if detect-secrets is installed
-if ! command -v detect-secrets &> /dev/null
-then
-    echo "Warning: detect-secrets is not installed."
-    echo "!!! detect-secrets will not be run."
-    exit 0
+branch=$(git branch --show-current)
+if [[ "$branch" == "main" ]]; then
+  echo "Error: commits directly on 'main' are blocked." >&2
+  exit 1
 fi
-# Check if pyahocorasick is installed (word-list)
-if ! python -c "import ahocorasick" &> /dev/null
-then
-    echo "Warning: pyahocorasick is not installed."
-    echo "!!! detect-secrets will not be run."
-    exit 0
-fi
-# Check if jq is installed
-if ! command -v jq &> /dev/null
-then
-    echo "Warning: jq is not installed."
-    echo "!!! detect-secrets will not be run."
-    exit 0
-fi
+
+for tool in detect-secrets jq; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "Error: required system command '$tool' is not installed." >&2
+    exit 1
+  fi
+done
 
 WORDLIST_ARG=""
 if [ -f wordlist.txt ] && [ -s wordlist.txt ]; then
-  if python -c "import ahocorasick" &> /dev/null; then
-    WORDLIST_ARG="--word-list wordlist.txt"
+  if ! command -v python >/dev/null 2>&1 || ! python -c "import ahocorasick" >/dev/null 2>&1; then
+    echo "Error: wordlist.txt requires Python and pyahocorasick." >&2
+    echo "Install it with: python -m pip install pyahocorasick" >&2
+    exit 1
   fi
+  WORDLIST_ARG="--word-list wordlist.txt"
 fi
 
 if [ -z "$WORDLIST_ARG" ] && grep -q '"file_name": "wordlist.txt"' .secrets.baseline 2>/dev/null; then

@@ -5,10 +5,10 @@ import path from 'node:path';
 import { test } from 'node:test';
 
 import fsHelpers from '@jestaubach/fs-helpers';
-import { install as installEsm } from '../dist/terrafile-backend-lib.js';
+import { install as installEsm } from '@jestaubach/terrafile-backend-lib';
 
 const require = createRequire(import.meta.url);
-const { install: installUmd } = require('../dist/terrafile-backend-lib.umd.cjs');
+const { install: installUmd } = require('@jestaubach/terrafile-backend-lib');
 const fs = fsHelpers.use(fsHelpers.default);
 
 test('ESM package preserves its Node path binding', async () => {
@@ -30,7 +30,13 @@ async function expectInstallSavesExistingTarget(install) {
     await writeFile(path.join(root, 'modules', 'existing.txt'), 'existing');
     await writeFile(terrafile, '{}');
 
-    await install({ directory: target, file: terrafile, fsHelpers: fs });
+    await install({
+      directory: target,
+      file: terrafile,
+      fsHelpers: fs,
+      fetcher: async () => ({ success: true, value: '' }),
+      cloner: async () => ({ success: true }),
+    });
 
     assert.equal(await readFile(path.join(saveLocation, 'existing.txt'), 'utf8'), 'existing');
     assert.equal(fs.checkIfDirExists(target).value, true);
