@@ -16,11 +16,11 @@ type GitModuleTypes = {
   replacePathIfPathParam: (_source: string, _repoPath: string) => string;
 };
 
-function replaceUrlVersionIfVersionParam(source: string, version: string): string {
+function replaceUrlVersionIfVersionParam(source: string, version?: string): string {
   return version ? [source.split(`?ref=`)[0], version].join(`?ref=`) : source;
 }
 
-function replacePathIfPathParam(source: string, repoPath: string): string {
+function replacePathIfPathParam(source: string, repoPath?: string): string {
   const [beforeGit, afterGit] = source.split(`.git`);
   const newAfterGit = afterGit || ``;
   const [beforeQref, afterQref] = newAfterGit.split(`?ref=`);
@@ -34,6 +34,9 @@ function replacePathIfPathParam(source: string, repoPath: string): string {
 
 function Git(matchStart?: string, sourceType?: ModulesKeyType): GitModuleTypes {
   async function fetch({ params, dest, cloner, fsHelpers }: FetchParams): Promise<Status> {
+    if (params.source === undefined) {
+      return { success: false, contents: null, error: `Repo URL is required` };
+    }
     const newUrl = replaceUrlVersionIfVersionParam(params.source, params.version);
     const regRepoUrl = replacePathIfPathParam(newUrl, params.path);
     return cloneRepoToDest(regRepoUrl, dest, cloner, fsHelpers);
@@ -45,7 +48,7 @@ function Git(matchStart?: string, sourceType?: ModulesKeyType): GitModuleTypes {
   };
 
   function match(source: string): ModulesKeyType | `` {
-    return startsWith(source, matchStart) ? sourceType : ``;
+    return matchStart !== undefined && startsWith(source, matchStart) ? sourceType ?? `` : ``;
   }
 
   return { fetch, match, testable, replaceUrlVersionIfVersionParam, replacePathIfPathParam };
