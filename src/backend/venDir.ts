@@ -10,7 +10,10 @@ function getSaveLocation(dir: string): string {
   return path.resolve(dir, `..`, `.terrafile.save`);
 }
 
-function renameExistingDir(installDir: string, options: CliOptions): string | null {
+function renameExistingDir(
+  installDir: string,
+  options: CliOptions,
+): string | null {
   let retVal: string | null = null;
   if (options.fsHelpers?.checkIfDirExists(installDir).value) {
     const saveLocation = getSaveLocation(installDir);
@@ -21,7 +24,10 @@ function renameExistingDir(installDir: string, options: CliOptions): string | nu
   return retVal;
 }
 
-function createNewDir(installDir: string, options: CliOptions): string | null {
+function createNewDir(
+  installDir: string,
+  options: CliOptions,
+): string | null {
   const createdStartingAt = options.fsHelpers?.createDir(installDir).value;
   return createdStartingAt ?? null;
 }
@@ -36,7 +42,8 @@ function createTargetDirectory(options: CliOptions): Status {
     }
     retVals.saved = renameExistingDir(installDir, options);
     retVals.created = useCreateDir(installDir, options);
-    retVals.success = options.fsHelpers.checkIfDirExists(installDir).value === true;
+    retVals.success =
+      options.fsHelpers.checkIfDirExists(installDir).value === true;
   }
   return retVals;
 }

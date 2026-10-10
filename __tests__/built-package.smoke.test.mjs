@@ -34,7 +34,7 @@ async function expectInstallSavesExistingTarget(install) {
       directory: target,
       file: terrafile,
       fsHelpers: fs,
-      fetcher: async () => ({ success: true, value: '' }),
+      fetcher: async () => ({ success: true, value: "" }),
       cloner: async () => ({ success: true }),
     });
 

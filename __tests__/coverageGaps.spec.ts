@@ -13,10 +13,13 @@ vi.mock('@jestaubach/fetcher-axios', () => ({
 
 import { readFileContents } from '../src/backend/processFile';
 import { install } from '../src/backend';
-import { getType } from '../src/backend/moduleSources';
+import { fetch as fetchModuleSource, getType } from '../src/backend/moduleSources';
 import { cloneRepoToDest } from '../src/backend/moduleSources/common/cloneRepo';
+import Git from '../src/backend/moduleSources/common/git';
 import local from '../src/backend/moduleSources/local';
 import terraformRegistry from '../src/backend/moduleSources/terraformRegistry';
+import { restoreDirectory } from '../src/backend/restore';
+import { createTargetDirectory } from '../src/backend/venDir';
 import fsHelpers from '@jestaubach/fs-helpers';
 import { ExecResult, FsHelpers, RetString } from '../src/backend';
 import * as spy from '../src/spy';
@@ -31,6 +34,13 @@ function useFsHelpers(overrides: Partial<FsHelpers> = {}): FsHelpers {
     renameDir: () => ({ success: true }),
     copyDirAbs: () => ({ success: true }),
     rimrafDir: () => ({ success: true }),
+    ...overrides,
+  } as FsHelpers;
+}
+
+function useRealFsHelpers(overrides: Partial<FsHelpers> = {}): FsHelpers {
+  return {
+    ...fsHelpers.use(fsHelpers.default),
     ...overrides,
   } as FsHelpers;
 }
@@ -95,6 +105,15 @@ describe(`coverage gaps`, () => {
     const result = await cloneRepoToDest(repoUrl, `destination`, successfulCloner, fs);
 
     expect(result.success).toBe(false);
+  });
+
+  it(`reports an unresolved repository subdirectory`, async () => {
+    const fs = useFsHelpers({ getAbsolutePath: () => ({ success: false }) });
+
+    const result = await cloneRepoToDest(repoUrl, `destination`, successfulCloner, fs);
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBeDefined();
   });
 
   it(`reports a successful clone without a repository subdirectory`, async () => {
@@ -185,6 +204,24 @@ describe(`coverage gaps`, () => {
     expect(getType(undefined as unknown as string)).toBeUndefined();
   });
 
+  it(`rejects a missing module source`, async () => {
+    const result = await fetchModuleSource({
+      params: {},
+      dest: `destination`,
+      fetcher: successfulFetcher,
+      cloner: successfulCloner,
+      fsHelpers: useFsHelpers(),
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe(`Module source is missing or invalid`);
+  });
+
+  it(`handles Git matchers without a module type`, () => {
+    expect(Git().match(`git@github.com:example/repository.git`)).toBe(``);
+    expect(Git(`git@`).match(`git@github.com:example/repository.git`)).toBe(``);
+  });
+
   it(`does not match a non-local source`, () => {
     expect(local.match(`https://github.com/example/repository.git`)).toBe(``);
   });
@@ -200,6 +237,83 @@ describe(`coverage gaps`, () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it(`reports a missing local source`, async () => {
+    const result = await local.fetch({
+      params: {},
+      dest: `destination`,
+      fetcher: successfulFetcher,
+      cloner: successfulCloner,
+      fsHelpers: useFsHelpers(),
+    });
+
+    expect(result.error).toBe(`Local source is required`);
+  });
+
+  it(`reports an unresolved local source path`, async () => {
+    const result = await local.fetch({
+      params: { source: `./missing` },
+      dest: `destination`,
+      fetcher: successfulFetcher,
+      cloner: successfulCloner,
+      fsHelpers: useFsHelpers({ getAbsolutePath: () => ({ success: false }) }),
+    });
+
+    expect(result.error).toContain(`Could not resolve local source`);
+  });
+
+  it(`reports an unresolved module destination`, async () => {
+    const baseFs = fsHelpers.use(fsHelpers.default);
+    const fs = useRealFsHelpers({
+      getAbsolutePath: (value) => value.startsWith(`coverage-unresolved`) ? { success: false } : baseFs.getAbsolutePath(value),
+    });
+
+    const result = await readFileContents({
+      file: `terrafile.sample.json`,
+      directory: `coverage-unresolved`,
+      fetcher: successfulFetcher,
+      cloner: successfulCloner,
+      fsHelpers: fs,
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toContain(`Could not resolve destination`);
+  });
+
+  it(`rejects processing when required fetch dependencies are missing`, async () => {
+    const result = await readFileContents({
+      file: `terrafile.sample.json`,
+      directory: `coverage-missing-dependencies`,
+      fsHelpers: useRealFsHelpers(),
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe(`Error: Required processing options are missing`);
+  });
+
+  it(`returns failure when target path resolution changes`, () => {
+    let pathLookups = 0;
+    const fs = useFsHelpers({
+      getAbsolutePath: (value) => ({
+        success: true,
+        value: ++pathLookups === 1 ? value : undefined,
+      }),
+    });
+
+    const result = createTargetDirectory({ directory: `target`, fsHelpers: fs });
+
+    expect(result.success).toBe(false);
+  });
+
+  it(`returns failure when restoring without filesystem helpers`, () => {
+    expect(restoreDirectory(`target`, {}).success).toBe(false);
+  });
+
+  it(`returns failure when the restore path cannot be resolved`, () => {
+    const fs = useFsHelpers({ getAbsolutePath: () => ({ success: false }) });
+
+    expect(restoreDirectory(`target`, { fsHelpers: fs }).success).toBe(false);
   });
 
   it(`reports a missing target directory`, async () => {
@@ -248,6 +362,19 @@ describe(`coverage gaps`, () => {
     });
 
     expect(console.log).toHaveBeenCalled();
+  });
+
+  it(`rejects a file read without contents`, async () => {
+    const defaultFs = fsHelpers.use(fsHelpers.default);
+    const fs = {
+      ...defaultFs,
+      readFile: () => ({ success: true }),
+    } as FsHelpers;
+
+    const result = await readFileContents({ file: `terrafile.sample.json`, fsHelpers: fs });
+
+    expect(result.success).toBe(false);
+    expect(result.contents).toBeNull();
   });
 
   it(`throws when the mocked process exits`, () => {

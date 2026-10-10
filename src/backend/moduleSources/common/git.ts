@@ -48,7 +48,9 @@ function Git(matchStart?: string, sourceType?: ModulesKeyType): GitModuleTypes {
   };
 
   function match(source: string): ModulesKeyType | `` {
-    return matchStart !== undefined && startsWith(source, matchStart) ? sourceType ?? `` : ``;
+    return matchStart !== undefined && startsWith(source, matchStart)
+      ? (sourceType ?? ``)
+      : ``;
   }
 
   return { fetch, match, testable, replaceUrlVersionIfVersionParam, replacePathIfPathParam };

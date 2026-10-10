@@ -12,8 +12,8 @@ type TerrafileStatus = {
   error: string | null;
   json?: unknown;
   validateOptions: () => TerrafileStatus;
-  verifyFile: (options: CliOptions) => TerrafileStatus;
-  readFile: (options: CliOptions) => TerrafileStatus;
+  verifyFile: (_options: CliOptions) => TerrafileStatus;
+  readFile: (_options: CliOptions) => TerrafileStatus;
   parse: () => TerrafileStatus;
   validateJson: () => TerrafileStatus;
   process: () => Promise<TerrafileStatus>;
@@ -40,7 +40,9 @@ function verifyFile(this: TerrafileStatus, opts: CliOptions): TerrafileStatus {
   }
   const file = opts.file;
   const absoluteFile = opts.fsHelpers.getAbsolutePath(file).value;
-  const fileExists = absoluteFile !== undefined && opts.fsHelpers.checkIfFileExists(absoluteFile).value === true;
+  const fileExists =
+    absoluteFile !== undefined &&
+    opts.fsHelpers.checkIfFileExists(absoluteFile).value === true;
   if (!fileExists) {
     this.success = false;
     this.contents = null;
@@ -81,7 +83,7 @@ function parse(this: TerrafileStatus): TerrafileStatus {
     console.log(chalk.green(`  + Success - parse json`));
   } catch {
     this.success = false;
-    this.contents = [];
+    this.contents = null;
     this.error = `Error: could not parse json appropriately`;
     console.log(chalk.red(`  ! Failed - parse json`));
   }
@@ -124,12 +126,23 @@ async function fetchModules(
 ): Promise<Status[]> {
   return Promise.all(
     contents.map(async ([key, val]) => {
-      const destination = fsHelpers.getAbsolutePath(`${dir}${path.sep}${key}`).value;
+      const destination = fsHelpers.getAbsolutePath(
+        `${dir}${path.sep}${key}`,
+      ).value;
       if (destination === undefined) {
-        return { success: false, error: `Could not resolve destination for '${key}'` };
+        return {
+          success: false,
+          error: `Could not resolve destination for '${key}'`,
+        };
       }
       console.log(chalk.blue(`    - Info - fetch: ${key}`));
-      return fetch({ params: val, dest: destination, fetcher, cloner, fsHelpers });
+      return fetch({
+        params: val,
+        dest: destination,
+        fetcher,
+        cloner,
+        fsHelpers,
+      });
     }),
   );
 }
@@ -140,7 +153,13 @@ async function process(this: TerrafileStatus): Promise<TerrafileStatus> {
   if (this.success) {
     const contents = this.contents;
     const { directory, fetcher, cloner, fsHelpers } = options;
-    if (contents === null || directory === undefined || fetcher === undefined || cloner === undefined || fsHelpers === undefined) {
+    if (
+      contents === null ||
+      directory === undefined ||
+      fetcher === undefined ||
+      cloner === undefined ||
+      fsHelpers === undefined
+    ) {
       this.success = false;
       this.error = `Error: Required processing options are missing`;
       return this;

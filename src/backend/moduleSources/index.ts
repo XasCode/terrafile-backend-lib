@@ -20,14 +20,20 @@ function getType(source: string | undefined): ModulesKeyType | undefined {
   if (source === undefined) {
     return undefined;
   }
-  const match = Object.entries(modules).find(([, module]) => module.match(source) !== ``);
+  const match = Object.entries(modules).find(
+    ([, module]) => module.match(source) !== ``,
+  );
   return match?.[0] as ModulesKeyType | undefined;
 }
 
 async function fetch({ params, dest, fetcher, cloner, fsHelpers }: FetchParams): Promise<Status> {
   const moduleType = getType(params.source);
   if (moduleType === undefined) {
-    return { success: false, contents: null, error: `Module source is missing or invalid` };
+    return {
+      success: false,
+      contents: null,
+      error: `Module source is missing or invalid`,
+    };
   }
   console.log(chalk.blue(`    - Info - type: ${moduleType}`));
   return modules[moduleType].fetch({ params, dest, fetcher, cloner, fsHelpers });

@@ -108,7 +108,9 @@ function moveFromTempRepoDirToFullDest([, repoDir]: RepoLocation, fullDest: stri
     const tempDir = `${fullDest}${tempDirName}`;
     const src = fsHelpers.getAbsolutePath(`${tempDir}${path.sep}${repoDir}`).value;
     if (src === undefined) {
-      return failedExecResult(`failed to resolve '${tempDir}${path.sep}${repoDir}'`);
+      return failedExecResult(
+        `failed to resolve '${tempDir}${path.sep}${repoDir}'`,
+      );
     }
     const retVal = fsHelpers.copyDirAbs(src, fullDest);
     if (!retVal.success) {
