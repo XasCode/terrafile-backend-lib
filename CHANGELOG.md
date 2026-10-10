@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.0](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.1.11...terrafile-backend-lib-v0.2.0) (2026-10-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **module-sources:** validate malformed module inputs
+
+### Bug Fixes
+
+* **ci:** repair Snyk policy and report handling ([101c7bd](https://github.com/XasCode/terrafile-backend-lib/commit/101c7bd14fbd31489555ddc3ef057baca3e07919))
+* **module-sources:** validate malformed module inputs ([02cec48](https://github.com/XasCode/terrafile-backend-lib/commit/02cec48b3cedf9a70c294c08056a27223fed86dd))
+* reject unavailable Terrafile contents ([eb01579](https://github.com/XasCode/terrafile-backend-lib/commit/eb01579a17a82790cf71da33a551800df51ad4da))
+
+## Changelog
+
 All notable changes to this project are documented here.
 
 This changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
