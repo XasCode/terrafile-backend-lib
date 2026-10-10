@@ -17,7 +17,10 @@ function match(source: string): ModulesKeyType | `` {
 
 function stripGitPrefixFromRepoUrl(terraformRegistryGitUrl: string): RetString {
   if (terraformRegistryGitUrl.includes(`git::`)) {
-    return { success: true, value: terraformRegistryGitUrl.split(`git::`)[1] };
+    const repoUrl = terraformRegistryGitUrl.split(`git::`)[1];
+    return repoUrl === undefined
+      ? { success: false, error: `Expected a repository URL after 'git::'` }
+      : { success: true, value: repoUrl };
   }
   return { success: false, error: `Expected location '${terraformRegistryGitUrl}' to begin with 'git::'` };
 }
@@ -35,10 +38,15 @@ function getRepoUrl(terraformRegistryGitUrl: string): RetString {
 async function getRegRepoUrl(downloadPointerUrl: string, fetcher: (_: Config) => Promise<RetString>): Promise<RetString> {
   const useFetcher = fetcher || defaultAxiosFetcher;
   const fetcherResult = await useFetcher({ url: downloadPointerUrl });
-  if (fetcherResult.success) {
+  if (fetcherResult.success && fetcherResult.value !== undefined) {
     return getRepoUrl(fetcherResult.value);
   }
-  return fetcherResult;
+  return {
+    success: false,
+    error:
+      fetcherResult.error ??
+      `Terraform registry request returned no repository URL`,
+  };
 }
 
 function getRegDownloadPointerUrl(source: string, version: string): string {
@@ -48,7 +56,7 @@ function getRegDownloadPointerUrl(source: string, version: string): string {
 }
 
 async function copyFromTerraformRegistry({ params, dest, fetcher, cloner, fsHelpers }: FetchParams): Promise<Status> {
-  if (params.source.length === 0) {
+  if (params.source === undefined || params.source.length === 0) {
     return {
       success: false,
       contents: null,
@@ -57,7 +65,7 @@ async function copyFromTerraformRegistry({ params, dest, fetcher, cloner, fsHelp
   }
   const downloadPointerUrl = getRegDownloadPointerUrl(params.source, params.version || ``);
   const regRepoUrl = await getRegRepoUrl(downloadPointerUrl, fetcher);
-  if (regRepoUrl.success) {
+  if (regRepoUrl.success && regRepoUrl.value !== undefined) {
     return cloneRepoToDest(regRepoUrl.value, dest, cloner, fsHelpers);
   }
   return {

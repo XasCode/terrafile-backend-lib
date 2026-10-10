@@ -1,33 +1,31 @@
 /// <reference types="vitest" />
 
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-import lodash from 'lodash';
-import dts from 'vite-plugin-dts';
-import builtinModules from 'builtin-modules';
-import pkg from './package.json';
-import commonjsExternals from 'vite-plugin-commonjs-externals';
+import { builtinModules } from 'node:module';
+import { resolve } from 'node:path';
+import { defineConfig } from 'vitest/config';
+import dts from 'unplugin-dts/vite';
+import pkg from './package.json' with { type: 'json' };
 
-const { escapeRegExp } = lodash;
-
-const dependencyExternals = Object.keys(pkg.dependencies).map(
-  (name) => new RegExp('^' + escapeRegExp(name) + '(\\/.+)?$'),
+const dependencyExternals = Object.keys(pkg.dependencies).filter(
+  (name) => name !== "@xascode/chalk",
 );
 const externals = [
   ...builtinModules,
   ...builtinModules.map((module) => `node:${module}`),
   ...dependencyExternals,
 ];
+const isExternal = (id: string): boolean =>
+  externals.some((name) => id === name || id.startsWith(`${name}/`));
 
 export default defineConfig({
   build: {
-    rollupOptions: {
-      external: externals,
+    rolldownOptions: {
+      external: isExternal,
     },
     lib: {
       name: 'terrafile-backend-lib',
       fileName: 'terrafile-backend-lib',
-      entry: resolve(__dirname, 'src/backend/index.ts'),
+      entry: resolve(import.meta.dirname, "src/backend/index.ts"),
     },
   },
   optimizeDeps: {
@@ -35,9 +33,6 @@ export default defineConfig({
   },
   plugins: [
     dts(),
-    commonjsExternals({
-      externals: dependencyExternals,
-    }),
     {
       name: 'esm-external-require',
       renderChunk(code, _chunk, outputOptions) {
@@ -54,6 +49,8 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul',
       reporter: [`text`, `json`, `html`, `lcov`],
+      include: ["src"],
+      exclude: ["src/**/*.d.ts", "src/**/__tests__/**"],
     },
     environment: 'node',
     testTimeout: 20000,

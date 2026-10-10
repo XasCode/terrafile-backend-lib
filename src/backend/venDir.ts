@@ -3,16 +3,19 @@ import { validOptions } from '../backend/utils';
 import { CliOptions, Option, Status } from './types';
 
 function cleanUpOldSaveLocation(dir: string, options: CliOptions): void {
-  options.fsHelpers.rimrafDir(dir);
+  options.fsHelpers?.rimrafDir(dir);
 }
 
 function getSaveLocation(dir: string): string {
   return path.resolve(dir, `..`, `.terrafile.save`);
 }
 
-function renameExistingDir(installDir: string, options: CliOptions): string {
-  let retVal = null;
-  if (options.fsHelpers.checkIfDirExists(installDir).value) {
+function renameExistingDir(
+  installDir: string,
+  options: CliOptions,
+): string | null {
+  let retVal: string | null = null;
+  if (options.fsHelpers?.checkIfDirExists(installDir).value) {
     const saveLocation = getSaveLocation(installDir);
     cleanUpOldSaveLocation(saveLocation, options);
     options.fsHelpers.renameDir(installDir, saveLocation);
@@ -21,8 +24,11 @@ function renameExistingDir(installDir: string, options: CliOptions): string {
   return retVal;
 }
 
-function createNewDir(installDir: string, options: CliOptions): string {
-  const createdStartingAt = options.fsHelpers.createDir(installDir).value;
+function createNewDir(
+  installDir: string,
+  options: CliOptions,
+): string | null {
+  const createdStartingAt = options.fsHelpers?.createDir(installDir).value;
   return createdStartingAt ?? null;
 }
 
@@ -31,9 +37,13 @@ function createTargetDirectory(options: CliOptions): Status {
   const useCreateDir = options?.createDir ?? createNewDir;
   if (validOptions(options, `directory` as Option)) {
     const installDir = options.fsHelpers.getAbsolutePath(options.directory).value;
+    if (installDir === undefined) {
+      return retVals;
+    }
     retVals.saved = renameExistingDir(installDir, options);
     retVals.created = useCreateDir(installDir, options);
-    retVals.success = options.fsHelpers.checkIfDirExists(installDir).value;
+    retVals.success =
+      options.fsHelpers.checkIfDirExists(installDir).value === true;
   }
   return retVals;
 }
