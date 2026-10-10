@@ -13,7 +13,15 @@ function copyFromLocalDir({ params, dest, fsHelpers }: FetchParams): Status {
     contents: null,
     error: `Error copying from local dir`,
   } as Status;
+  if (params.source === undefined) {
+    retVal.error = `Local source is required`;
+    return retVal;
+  }
   const src = fsHelpers.getAbsolutePath(params.source).value;
+  if (src === undefined) {
+    retVal.error = `Could not resolve local source '${params.source}'`;
+    return retVal;
+  }
   const dirExists = fsHelpers.checkIfDirExists(src).value;
   if (dirExists) {
     const copyResult = fsHelpers.copyDirAbs(src, dest);

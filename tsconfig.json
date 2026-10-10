@@ -8,6 +8,7 @@
       "DOM"
     ],
     "moduleResolution": "Bundler",
+    "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -25,7 +26,8 @@
     "node_modules",
     "__mocks__/**/*.ts",
     "dist",
-    "__tests__/**/*.ts"
+    "__tests__/**/*.ts",
+    "src/**/__tests__/**/*.ts"
   ],
   "typeRoots": [
     "node_modules/@types",

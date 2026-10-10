@@ -1,7 +1,11 @@
 # terrafile-backend-lib
 
+See the [changelog](CHANGELOG.md) and [migration guide](MIGRATION.md).
+
 ## Badges
 
+[![npm version](https://img.shields.io/npm/v/%40jestaubach%2Fterrafile-backend-lib)](https://www.npmjs.com/package/@jestaubach/terrafile-backend-lib)
+[![npm downloads](https://img.shields.io/npm/dm/%40jestaubach%2Fterrafile-backend-lib)](https://www.npmjs.com/package/@jestaubach/terrafile-backend-lib)
 [![Maintainability](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib/maintainability.svg)](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib)
 [![Code Coverage](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib/coverage.svg)](https://qlty.sh/gh/XasCode/projects/terrafile-backend-lib)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/75b022a40cb24c69a41bbee957447370)](https://app.codacy.com/gh/XasCode/terrafile-backend-lib/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)

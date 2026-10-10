@@ -1,11 +1,22 @@
-import { CliOptions, Option } from './types';
+import { CliOptions, FsHelpers, Option } from './types';
 
-function validOptions(options: CliOptions, fileOrFolder: Option): boolean {
+type ValidOptions<K extends Option> = CliOptions & {
+  fsHelpers: FsHelpers;
+} & Required<Pick<CliOptions, K>>;
+
+/** Validates required CLI options and resolves their path. */
+function validOptions<K extends Option>(
+  options: CliOptions | undefined,
+  fileOrFolder: K,
+): options is ValidOptions<K> {
+  const pathValue =
+    fileOrFolder === `file` ? options?.file : options?.directory;
   return (
     typeof options === `object` &&
-    options !== null &&
+    options?.fsHelpers !== undefined &&
+    typeof pathValue === `string` &&
     Object.keys(options).includes(fileOrFolder) &&
-    options.fsHelpers.getAbsolutePath(options[fileOrFolder]).value !== undefined
+    options.fsHelpers.getAbsolutePath(pathValue).value !== undefined
   );
 }
 

@@ -5,7 +5,7 @@ type Backend = {
 };
 
 type ExecResult = {
-  error?: ExecFileException;
+  error?: ExecFileException | null;
   stdout?: string;
   stderr?: string;
 };
@@ -43,10 +43,10 @@ type CliOptions = {
 
 type Status = {
   success: boolean;
-  saved?: string;
-  created?: string;
+  saved?: string | null;
+  created?: string | null;
   error?: string | null;
-  contents?: [string, Record<string, string>][];
+  contents?: [string, Record<string, string>][] | null;
   options?: CliOptions;
   process?: () => Promise<Status>;
   validateFormat?: () => Status;
