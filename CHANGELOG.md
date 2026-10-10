@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.0...terrafile-backend-lib-v0.2.1) (2026-10-10)
+
+
+### Bug Fixes
+
+* correct package repository metadata ([1f84020](https://github.com/XasCode/terrafile-backend-lib/commit/1f840209fa980167858b3dcecfdbcf9d4fbfd152))
+* correct package repository metadata ([15b8255](https://github.com/XasCode/terrafile-backend-lib/commit/15b82553f2c697e4408528efc8a1eead32b6b5f3))
+
 ## [0.2.0](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.1.11...terrafile-backend-lib-v0.2.0) (2026-10-10)
 
 
