@@ -4,7 +4,7 @@ type ValidOptions<K extends Option> = CliOptions & {
   fsHelpers: FsHelpers;
 } & Required<Pick<CliOptions, K>>;
 
-/** Checks that required CLI fields are present and their path can be resolved. */
+/** Validates required CLI options and resolves their path. */
 function validOptions<K extends Option>(
   options: CliOptions | undefined,
   fileOrFolder: K,

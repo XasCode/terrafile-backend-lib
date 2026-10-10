@@ -5,7 +5,12 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ["node_modules/**", "dist/**", "coverage/**", "lint-staged.config.js"],
+    ignores: [
+      "node_modules/**",
+      "dist/**",
+      "coverage/**",
+      "lint-staged.config.js",
+    ],
   },
   js.configs.recommended,
   {

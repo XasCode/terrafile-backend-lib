@@ -44,7 +44,8 @@ async function getRegRepoUrl(downloadPointerUrl: string, fetcher: (_: Config) =>
   return {
     success: false,
     error:
-      fetcherResult.error ?? `Terraform registry request returned no repository URL`,
+      fetcherResult.error ??
+      `Terraform registry request returned no repository URL`,
   };
 }
 
