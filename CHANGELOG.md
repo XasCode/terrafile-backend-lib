@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.1...terrafile-backend-lib-v0.2.2) (2026-10-11)
+
+
+### Bug Fixes
+
+* **deps:** support current cloner and fetcher releases ([d559c4b](https://github.com/XasCode/terrafile-backend-lib/commit/d559c4b806cf36fa00e0f2a970b4f0629273d1a4))
+
 ## [0.2.1](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.0...terrafile-backend-lib-v0.2.1) (2026-10-10)
 
 
