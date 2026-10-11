@@ -47,7 +47,7 @@ export default defineConfig({
     setupFiles: './__tests__/testUtils/testSetupFile.ts',
     mockReset: true,
     coverage: {
-      provider: 'istanbul',
+      provider: 'v8',
       reporter: [`text`, `json`, `html`, `lcov`],
       include: ["src"],
       exclude: ["src/**/*.d.ts", "src/**/__tests__/**"],

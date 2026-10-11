@@ -38,8 +38,8 @@
   },
   "homepage": "https://github.com/XasCode/terrafile#readme",
   "dependencies": {
-    "@jestaubach/cloner-git": "^0.1.14",
-    "@jestaubach/fetcher-axios": "^0.1.9",
+    "@jestaubach/cloner-git": "^0.2.1",
+    "@jestaubach/fetcher-axios": "^0.2.0",
     "@jestaubach/fs-helpers": "^0.2.31",
     "fs-extra": "^11.4.1"
   },
@@ -54,7 +54,7 @@
     "@types/node": "^22.20.5",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",
-    "@vitest/coverage-istanbul": "^5.0.3",
+    "@vitest/coverage-v8": "^5.0.3",
     "@vue/language-core": "^3.1.5",
     "@xascode/chalk": "^0.2.0",
     "eslint": "^10.12.0",
