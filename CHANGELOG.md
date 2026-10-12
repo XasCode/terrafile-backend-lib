@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.2...terrafile-backend-lib-v0.2.3) (2026-10-12)
+
+
+### Continuous Integration
+
+* **release-please:** add bot ([#112](https://github.com/XasCode/terrafile-backend-lib/issues/112)) ([b29711f](https://github.com/XasCode/terrafile-backend-lib/commit/b29711f2b0d0cf3429ef5d66d6684309aecf59a7))
+
 ## [0.2.2](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.1...terrafile-backend-lib-v0.2.2) (2026-10-11)
 
 
