@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.7](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.6...terrafile-backend-lib-v0.2.7) (2026-10-13)
+
+
+### Continuous Integration
+
+* **release-please:** auto merge ([#123](https://github.com/XasCode/terrafile-backend-lib/issues/123)) ([a05b374](https://github.com/XasCode/terrafile-backend-lib/commit/a05b37497cacca2d4f82e437e657b4838de9bd1c))
+
 ## [0.2.6](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.5...terrafile-backend-lib-v0.2.6) (2026-10-13)
 
 
