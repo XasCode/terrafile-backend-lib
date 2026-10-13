@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.3...terrafile-backend-lib-v0.2.4) (2026-10-12)
+
+
+### Continuous Integration
+
+* **release-please:** pin create-github-app-token ([#115](https://github.com/XasCode/terrafile-backend-lib/issues/115)) ([5c53feb](https://github.com/XasCode/terrafile-backend-lib/commit/5c53feb3cd7acf84b261e08f8fc54aadcc1e1ca6))
+
 ## [0.2.3](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.2...terrafile-backend-lib-v0.2.3) (2026-10-12)
 
 
