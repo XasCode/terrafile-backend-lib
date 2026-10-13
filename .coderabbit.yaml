@@ -2,8 +2,8 @@ language: en-US
 
 reviews:
   auto_review:
-    ignore_title_keywords:
-      - "release-please--"
+    ignore_usernames:
+      - "release-please-xascode[bot]"
   profile: chill
   path_filters:
     - "!dist/**"
