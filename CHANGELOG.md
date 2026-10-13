@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.8](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.7...terrafile-backend-lib-v0.2.8) (2026-10-13)
+
+
+### Continuous Integration
+
+* **commitlint:** allow 120 char footer ([#125](https://github.com/XasCode/terrafile-backend-lib/issues/125)) ([9126b68](https://github.com/XasCode/terrafile-backend-lib/commit/9126b68ee041e7273e4dc55fb6edb262686ec70e))
+
 ## [0.2.7](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.6...terrafile-backend-lib-v0.2.7) (2026-10-13)
 
 
