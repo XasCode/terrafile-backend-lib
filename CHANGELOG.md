@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.4...terrafile-backend-lib-v0.2.5) (2026-10-13)
+
+
+### Continuous Integration
+
+* **coderabbit:** add coderabbit config ([#117](https://github.com/XasCode/terrafile-backend-lib/issues/117)) ([c5bd782](https://github.com/XasCode/terrafile-backend-lib/commit/c5bd7827272f9932aefb4051cafe0b3bbe5a3762))
+
 ## [0.2.4](https://github.com/XasCode/terrafile-backend-lib/compare/terrafile-backend-lib-v0.2.3...terrafile-backend-lib-v0.2.4) (2026-10-12)
 
 
